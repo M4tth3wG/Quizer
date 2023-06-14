@@ -103,12 +103,15 @@ class MultipleChoiceQuestion(Question):
         return result
     
     def check_answer(self, input_answers):
+        if len(input_answers) > len(self.correct_answers):
+            return 0
         actual_correct_answers = 0
         for correct_answer in self.correct_answers:
             if correct_answer in input_answers:
                 actual_correct_answers += 1
             
-        return actual_correct_answers/len(self.correct_answers) * self.number_of_points
+        # return actual_correct_answers/max(len(self.correct_answers), len(input_answers)) * self.number_of_points
+        return actual_correct_answers/len(self.correct_answers)* self.number_of_points
     
     
     def get_correct_answers(self):

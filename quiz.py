@@ -17,7 +17,7 @@ class Quiz:
         self.mode = mode
         self.shuffle = shuffle
         self.is_ready = False
-        self.is_blocked = False
+        self.is_blocked = True
         self.number_of_question_repetition = number_of_question_repetition
 
     def reset_quiz(self):

@@ -37,7 +37,7 @@ def main():
     quiz = Quiz([x1,x2])
     quiz.prepare_quiz()
 
-    correct_answers = [[1], [3,4]]
+    correct_answers = [[2], [1,2,3]]
 
     print(SPLIT_LINE)
     for answer in correct_answers:
