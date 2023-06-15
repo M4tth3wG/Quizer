@@ -1,5 +1,7 @@
 from questions import SingleChoiceQuestion, MultipleChoiceQuestion, Question
 from quiz import Quiz
+from pathlib import Path
+import os
 
 
 SPLIT_LINE = '---------------------------'
@@ -72,7 +74,17 @@ def main():
         print(quiz.check_answer(answer))
         print(SPLIT_LINE)
 
-    print('Score:', quiz.score)
+    print('Score:', quiz.get_score())
+
+    print(x3.answers)
+    print(x3.save_question_into_file(Path(f'./questions_txt'), 'test001.txt'))
+    print(x4.save_question_into_file(Path(f'./questions_txt'), 'test002.txt'))
+    print(x4.save_question_into_file(Path(f'./questions2_txt'), 'test002.txt'))
+
+    print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test001.txt')))
+    print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test002.txt')))
+
+
 
 
 

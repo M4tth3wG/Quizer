@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
-import string, re
+import string, re, os, sys
+from pathlib import Path
 
-# MAIN_INDICATOR = '(a)'
+
+SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
+MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 
 
 class Question(ABC):
@@ -9,7 +12,7 @@ class Question(ABC):
     def __init__(self, content, answers : list, number_of_points=1):
         self.content = content
         self.number_of_points = number_of_points
-        self.answers : dict = self.convert_to_show_form(answers)
+        self.answers : dict = self.convert_answers_to_show_form(answers)
 
 
     def __str__(self):
@@ -39,14 +42,13 @@ class Question(ABC):
         pass
 
 
-    def convert_to_show_form(self, answers):
+    def convert_answers_to_show_form(self, answers):
         answers_dict = {}
         for answer, letter in zip(answers, list(string.ascii_uppercase)):
             answers_dict[letter] = f'{letter}) {answer}'
 
         return answers_dict
     
-
     def show_answers(self):
         print(self.answers)
         
@@ -54,6 +56,30 @@ class Question(ABC):
     @abstractmethod
     def get_correct_answers(self):
         pass
+
+    def save_question_into_file(self, path, file_name):
+        full_path = Path(f'{path}{os.sep}{file_name}')
+        try:
+            with open(full_path, 'w+', encoding='utf-8') as file:
+                file.write(str(self.convert_to_file_form()) + '\n')
+                return True
+        except FileNotFoundError:
+            sys.stderr.write(f'File not found (Path: {full_path})\n')
+            return False    
+    
+    @staticmethod
+    def read_question_from_file(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as file:
+                loaded_text = ''
+                for line in file.readlines():
+                    loaded_text += line
+
+                return Question.load_from_string(loaded_text)
+        except FileNotFoundError:
+            sys.stderr.write(f'File not found (Path: {path})\n')
+            return None
+
 
 
 
@@ -104,7 +130,7 @@ class SingleChoiceQuestion(Question):
 
 
     def convert_to_file_form(self):
-        result = 'SQ '
+        result = SINGLE_CHOICE_QUESTION_HEADER
 
         for answer_index in range(1, len(self.answers)+1):
             if self.correct_answer == answer_index:
@@ -114,8 +140,8 @@ class SingleChoiceQuestion(Question):
 
         result += f'\n{self.content}\n'
 
-        for answer in self.answers.values():
-            result += f'\t{answer}\n'
+        for key in self.answers.keys():
+            result += f'\t{self.answers[key][3:]}\n'
 
         return result
     
@@ -176,7 +202,7 @@ class MultipleChoiceQuestion(Question):
             print(ex)
 
     def convert_to_file_form(self):
-        result = 'MQ '
+        result = MULTIPLE_CHOICE_QUESTION_HEADER
 
         for answer_index in range(1, len(self.answers)+1):
             digit_to_concat = '0'
@@ -188,8 +214,8 @@ class MultipleChoiceQuestion(Question):
 
         result += f'\n{self.content}\n'
 
-        for answer in self.answers.values():
-            result += f'\t{answer}\n'
+        for key in self.answers.keys():
+            result += f'\t{self.answers[key][3:]}\n'
 
         return result
     
