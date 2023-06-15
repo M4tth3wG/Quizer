@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import string
+import string, re
 
 # MAIN_INDICATOR = '(a)'
 
@@ -11,19 +11,33 @@ class Question(ABC):
         self.number_of_points = number_of_points
         self.answers : dict = self.convert_to_show_form(answers)
 
+
     def __str__(self):
         result = f'{self.content}\n'
         for answer in self.answers.values():
             result += f'\t {answer}\n'
-        return result
+        return result[:-1]
+    
+    @staticmethod
+    def load_from_string(question_str):
+        lines = question_str.splitlines()
+        if re.search(r"SQ\d+", lines[0]):
+            return SingleChoiceQuestion.load_from_string(lines)
+        elif re.search(r"MQ\d+", lines[0]):
+            return MultipleChoiceQuestion.load_from_string(lines)
+        else:
+            raise ValueError("Invalid input of question string")
+
 
     @abstractmethod
     def convert_to_file_form(self):
         pass
 
+
     @abstractmethod
     def check_answer(self, input_answer):
         pass
+
 
     def convert_to_show_form(self, answers):
         answers_dict = {}
@@ -32,9 +46,11 @@ class Question(ABC):
 
         return answers_dict
     
+
     def show_answers(self):
         print(self.answers)
         
+
     @abstractmethod
     def get_correct_answers(self):
         pass
@@ -46,6 +62,45 @@ class SingleChoiceQuestion(Question):
     def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
         super().__init__(content, answers, number_of_points)
         self.correct_answer = correct_answer
+
+    @staticmethod
+    def load_from_string(lines):
+        try:
+            answers_as_digits = lines[0][2:]
+            loaded_correct_answer_index = -1
+            for index, digit in enumerate(answers_as_digits):
+                if digit == '1':
+                    if loaded_correct_answer_index == -1:
+                        loaded_correct_answer_index = index+1
+                    else:
+                        raise ValueError('Found more than one correct answer!!!')
+                    
+            if loaded_correct_answer_index == -1: raise ValueError("No correct answer found")
+
+
+            if re.match(r'\S', lines[1].strip()):
+                loaded_content = lines[1].strip()
+            else:
+                raise ValueError('No question found')
+
+            loaded_answers = []
+
+            for line in lines[2:]:   
+                if re.match(r'\S', line.strip()):
+                    loaded_answers.append(line.strip())
+                else:
+                    break
+
+            if len(loaded_answers) != len(answers_as_digits):
+                raise ValueError('Incompatible number of answers!!!')
+            
+            
+            return SingleChoiceQuestion(loaded_content, loaded_answers, loaded_correct_answer_index)
+
+
+        except IndexError as ex:
+            print(ex)
+        
 
 
     def convert_to_file_form(self):
@@ -59,11 +114,12 @@ class SingleChoiceQuestion(Question):
 
         result += f'\n{self.content}\n'
 
-        for index, answer in enumerate(self.answers):
-            result += f'\t {index+1}. {answer}\n'
+        for answer in self.answers.values():
+            result += f'\t{answer}\n'
 
         return result
     
+
     def check_answer(self, input_answer):
 
         if len(input_answer) == 1:
@@ -84,6 +140,41 @@ class MultipleChoiceQuestion(Question):
         super().__init__(content, answers, number_of_points)
         self.correct_answers = correct_answers
 
+    @staticmethod
+    def load_from_string(lines):
+        try:
+            answers_as_digits = lines[0][2:]
+            loaded_correct_answer_indexes = []
+            for index, digit in enumerate(answers_as_digits):
+                if digit == '1':
+                    loaded_correct_answer_indexes.append(index+1)
+                    
+            if len(loaded_correct_answer_indexes) < 2: raise ValueError('Not enough correct answers found')
+
+
+            if re.match(r'\S', lines[1].strip()):
+                loaded_content = lines[1].strip()
+            else:
+                raise ValueError('No question found')
+
+            loaded_answers = []
+
+            for line in lines[2:]:   
+                if re.match(r'\S', line.strip()):
+                    loaded_answers.append(line.strip())
+                else:
+                    break
+
+            if len(loaded_answers) != len(answers_as_digits):
+                raise ValueError('Incompatible number of answers!!!')
+            
+            
+            return MultipleChoiceQuestion(loaded_content, loaded_answers, loaded_correct_answer_indexes)
+
+
+        except IndexError as ex:
+            print(ex)
+
     def convert_to_file_form(self):
         result = 'MQ '
 
@@ -97,8 +188,8 @@ class MultipleChoiceQuestion(Question):
 
         result += f'\n{self.content}\n'
 
-        for index, answer in enumerate(self.answers):
-            result += f'\t {index+1}. {answer}\n'
+        for answer in self.answers.values():
+            result += f'\t{answer}\n'
 
         return result
     

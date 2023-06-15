@@ -20,14 +20,18 @@ class Quiz:
         self.is_blocked = True
         self.number_of_question_repetition = number_of_question_repetition
 
+
     def reset_quiz(self):
         self.score = 0
+
 
     def clear_questions(self):
         self.questions = []
 
+
     def add_question(self, new_question):
         self.questions_bank.append(new_question)
+
 
     def save_quiz_to_file(name, path=r'.') :
         ...
@@ -40,6 +44,7 @@ class Quiz:
             random.shuffle(self.question)
         self.is_ready, self.is_blocked = True, False
 
+
     def get_question(self):
         if self.is_blocked:
             raise BlockedQuizException('The quiz did not receive an answer to the previous question!!!')
@@ -49,6 +54,7 @@ class Quiz:
         else:
             raise NotPreparedQuizException('Quiz has not been prepared!!!')
         
+
     def check_answer(self, input_answer):
         if self.is_blocked:
             last_question: Question = self.questions.pop(0)
