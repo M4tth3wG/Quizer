@@ -47,7 +47,7 @@ def main():
 
     # loading custom style sheet
 
-    """ file = QFile("Hookmark.qss")
+    """ file = QFile("MaterialDark.qss")
     file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
     stream = QTextStream(file)
     app.setStyleSheet(stream.readAll()) """

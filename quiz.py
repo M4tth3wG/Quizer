@@ -34,7 +34,7 @@ class Quiz:
     def read_quiz_from_folder(path_to_file):
         loaded_questions = []
         ...
-        return Quiz(loaded_questions)
+        return Quiz('Bug', loaded_questions)
     
     
     def save_quiz_to_file(file_name, path=r'.') :
