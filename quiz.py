@@ -1,4 +1,4 @@
-import os, random
+import os, random, json
 from questions import Question
 from attempt import Attempt
 from itertools import repeat
@@ -8,6 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 from datetime import datetime
+from dataclasses import dataclass
 
 
 GENTLE_MODE = 1
@@ -16,7 +17,7 @@ RELENTLESS_MODE = 0
 RESULT_DATABASE_FILE = r'scores_database.db'
 RESULT_DATABASE_FOLDER = r'./quiz_results'
 
-
+@dataclass
 class Quiz:
 
     def __init__(self, name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
@@ -126,3 +127,15 @@ class Quiz:
         # Wyświetlanie wykresu
         plt.tight_layout()
         plt.show()
+
+    def to_json(self):
+        quiz_dict = {
+            'name': self.name,
+            'question_bank': [question.__dict__() for question in self.questions_bank],
+            'mode': self.mode,
+            'shuffle': self.shuffle,
+            'isReady': False, 
+            'isBlocked': True,
+            'number_of_question_repetition': self.number_of_question_repetition
+        }
+        return json.dumps(quiz_dict, indent=4, ensure_ascii=False)

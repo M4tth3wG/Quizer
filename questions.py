@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
-import string, re, os, sys
+import string, re, os, sys, json
 from pathlib import Path
+from dataclasses import asdict, dataclass
 
 
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
 MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 
 
+@dataclass
 class Question(ABC):
 
     def __init__(self, content, answers : list, number_of_points=1.0):
@@ -80,12 +82,13 @@ class Question(ABC):
         except FileNotFoundError:
             sys.stderr.write(f'File not found (Path: {full_path})\n')
             return False    
+        
     
 
 
 
 
-
+@dataclass
 class SingleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
@@ -159,15 +162,34 @@ class SingleChoiceQuestion(Question):
 
     def get_correct_answers(self):
         return [self.correct_answer]
+    
+    def __dict__(self):
+        return {
+            'content': self.content,
+            'number_of_points': self.number_of_points,
+            'answers': self.answers,
+            'correct_answer': self.correct_answer
+        }
+    
+    def to_json(self):
+        return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
 
  
 
-
+@dataclass
 class MultipleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answers, number_of_points : int = 1):
         super().__init__(content, answers, number_of_points)
         self.correct_answers = correct_answers
+
+    def __dict__(self):
+        return {
+            "content": self.content,
+            "answers": self.answers,
+            "correct_answers": self.correct_answers,
+            "number_of_points": self.number_of_points
+        }
 
     @staticmethod
     def load_from_string(lines):
@@ -236,3 +258,15 @@ class MultipleChoiceQuestion(Question):
     
     def get_correct_answers(self):
         return self.correct_answers.copy()
+    
+
+    def __dict__(self):
+        return {
+            'content': self.content,
+            'number_of_points': self.number_of_points,
+            'answers': self.answers,
+            'correct_answers': self.correct_answers
+        }
+    
+    def to_json(self):
+        return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
