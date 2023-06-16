@@ -128,21 +128,24 @@ class Quiz:
         plt.tight_layout()
         plt.show()
 
-    def load_from_json(self,path):
+    @staticmethod   
+    def load_from_json(path):
         with open(path, 'r', encoding='utf-8') as file:
             data = json.loads(file.read())
 
-            self.name = data['name']
-            self.questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
-            self.mode = data['mode']
-            self.shuffle = data['shuffle']
-            self.isReady = data['isReady'] 
-            self.isBlocked = data ['isBlocked']
-            self.number_of_question_repetition = data['number_of_question_repetition']
+            name = data['name']
+            questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
+            mode = data['mode']
+            shuffle = data['shuffle']
+            isReady = data['isReady'] 
+            isBlocked = data ['isBlocked']
+            number_of_question_repetition = data['number_of_question_repetition']
 
-            print(self.questions_bank)
+            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
+            return_quiz.is_ready = isReady
+            return_quiz.is_blocked = isBlocked
 
-            # return Quiz(name, question_bank, mode, shuffle, number_of_question_repetition)
+            return return_quiz
 
     def to_json(self):
         quiz_dict = {
