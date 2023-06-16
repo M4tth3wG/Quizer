@@ -1,6 +1,7 @@
 import PyQt6
 from PyQt6.QtWidgets import *
 from PyQt6 import uic
+from PyQt6.QtCore import QFile, QTextStream
 from pathlib import Path
 import sys
 import os
@@ -44,12 +45,19 @@ class MenuWindow(QMainWindow):
 def main():
     app = QApplication([])
 
-    #try:
-    window = MenuWindow(Path("main_window.ui"))
-    window.show()
-    sys.exit(app.exec())
-    #except:
-    #sys.stderr.write("FATAL ERROR!!!")
+    # loading custom style sheet
+
+    """ file = QFile("Hookmark.qss")
+    file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
+    stream = QTextStream(file)
+    app.setStyleSheet(stream.readAll()) """
+
+    try:
+        window = MenuWindow(Path("main_window.ui"))
+        window.show()
+        sys.exit(app.exec())
+    except:
+        sys.stderr.write("FATAL ERROR!!!")
     
 
 if __name__ == '__main__':

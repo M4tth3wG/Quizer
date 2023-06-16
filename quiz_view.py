@@ -16,3 +16,6 @@ class QuizWindow(QMainWindow):
 
     def start_quiz(self):
         self.quiz_window_views.setCurrentIndex(1)
+
+    def load_question(self):
+        pass
