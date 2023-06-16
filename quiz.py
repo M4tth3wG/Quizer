@@ -100,6 +100,9 @@ class Quiz:
     def get_actual_index(self):
         return self.last_attempt.index
     
+    def get_number_of_question(self):
+        return len(self.last_attempt.questions)
+    
     def get_total_max_points(self):
         return self.last_attempt.get_max_points()
     
