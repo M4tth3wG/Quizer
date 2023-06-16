@@ -128,8 +128,8 @@ class Quiz:
         plt.tight_layout()
         plt.show()
 
-    def load_from_json(self,file_name):
-        with open(file_name, 'r', encoding='utf-8') as file:
+    def load_from_json(self,path):
+        with open(path, 'r', encoding='utf-8') as file:
             data = json.loads(file.read())
 
             self.name = data['name']

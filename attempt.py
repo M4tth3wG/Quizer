@@ -1,4 +1,5 @@
 from questions import *
+from exceptions import EndQuestionException
 
 class Attempt:
 
@@ -51,5 +52,7 @@ class Attempt:
         return self.questions[self.index - 1]
     
     def peek_next_question(self):
+        if self.index >= len(self.questions):
+            raise EndQuestionException("There is no more questions!!!")
         return self.questions[self.index]
 

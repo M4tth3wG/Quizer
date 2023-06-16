@@ -35,12 +35,13 @@ x2 = MultipleChoiceQuestion(
 
 quiz = Quiz("test", [x1,x2])
 
+i = 1
+for q in quiz.questions_bank:
+    with open(f'test_json{i}.json', 'w+', encoding='utf-8') as file:
+        file.write(q.to_json() + '\n')
+    i += 1
 
-with open('test_json.json', 'r+', encoding='utf-8') as file:
-    file.write(x1.to_json() + '\n')
-    file.write(x2.to_json() + '\n')
-
-with open('quiz_json.json', 'r+', encoding='utf-8') as file:
+with open('quiz_json.json', 'w+', encoding='utf-8') as file:
     file.write(quiz.to_json())
 
 
