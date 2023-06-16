@@ -48,6 +48,8 @@ class Attempt:
             raise ValueError('There are more answers than there are in the question!!!')
         
     def pop_next_question(self):
+        if self.index >= len(self.questions):
+            raise EndQuestionException("There is no more questions!!!")
         self.index += 1
         return self.questions[self.index - 1]
     
