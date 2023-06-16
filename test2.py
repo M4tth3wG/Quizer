@@ -2,7 +2,7 @@
 from questions import SingleChoiceQuestion, MultipleChoiceQuestion, Question
 from quiz import Quiz
 from pathlib import Path
-import os
+import os, json
 
 
 x1 = SingleChoiceQuestion(
@@ -36,9 +36,15 @@ x2 = MultipleChoiceQuestion(
 quiz = Quiz("test", [x1,x2])
 
 
-with open('test_json.json', 'a+', encoding='utf-8') as file:
+with open('test_json.json', 'r+', encoding='utf-8') as file:
     file.write(x1.to_json() + '\n')
     file.write(x2.to_json() + '\n')
 
-with open('quiz_json.json', 'a+', encoding='utf-8') as file:
+with open('quiz_json.json', 'r+', encoding='utf-8') as file:
     file.write(quiz.to_json())
+
+
+load_quiz = Quiz(None, None)
+load_quiz.load_from_json('quiz_json.json')
+
+print(load_quiz.questions_bank[0])

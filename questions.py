@@ -7,8 +7,8 @@ from dataclasses import asdict, dataclass
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
 MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 
-
-@dataclass
+# 
+# @dataclass
 class Question(ABC):
 
     def __init__(self, content, answers : list, number_of_points=1.0):
@@ -22,7 +22,15 @@ class Question(ABC):
         for answer in self.answers.values():
             result += f'\t {answer}\n'
         return result[:-1]
-    
+
+    # def adjust_dict(self):
+    #     result_dict = {}
+    #     for key in self.answers:
+    #         # result_dict[key] = self.answers[key][3:]
+    #         result_dict[key] = self.answers[key]
+
+    #     return result_dict
+
 
     @abstractmethod
     def convert_to_file_form(self):
@@ -83,7 +91,15 @@ class Question(ABC):
             sys.stderr.write(f'File not found (Path: {full_path})\n')
             return False    
         
-    
+    @staticmethod
+    def read_from_dict(q_dict):
+        if q_dict['type'] == 'SQ':
+            print(q_dict['answers'])
+            return SingleChoiceQuestion.read_from_dict(q_dict)
+        elif q_dict['type'] == 'MQ':
+            return MultipleChoiceQuestion.read_from_dict(q_dict)
+        else:
+            raise ValueError("Unknown type of question!!!")
 
 
 
@@ -94,6 +110,16 @@ class SingleChoiceQuestion(Question):
     def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
         super().__init__(content, answers, number_of_points)
         self.correct_answer = correct_answer
+
+    def __dict__(self):
+        return {
+            'type': 'SQ',
+            'content': self.content,
+            'number_of_points': self.number_of_points,
+            'answers': self.answers,
+            'correct_answers': self.correct_answer
+        }
+
 
     @staticmethod
     def load_from_string(lines):
@@ -163,13 +189,13 @@ class SingleChoiceQuestion(Question):
     def get_correct_answers(self):
         return [self.correct_answer]
     
-    def __dict__(self):
-        return {
-            'content': self.content,
-            'number_of_points': self.number_of_points,
-            'answers': self.answers,
-            'correct_answer': self.correct_answer
-        }
+
+    
+    @staticmethod
+    def read_from_dict(q_dict):
+        result = SingleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
+        result.answers = q_dict['answers']
+        return result
     
     def to_json(self):
         return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
@@ -185,8 +211,9 @@ class MultipleChoiceQuestion(Question):
 
     def __dict__(self):
         return {
+            'type': 'MQ',
             "content": self.content,
-            "answers": self.answers,
+            'answers': self.answers,
             "correct_answers": self.correct_answers,
             "number_of_points": self.number_of_points
         }
@@ -259,14 +286,13 @@ class MultipleChoiceQuestion(Question):
     def get_correct_answers(self):
         return self.correct_answers.copy()
     
-
-    def __dict__(self):
-        return {
-            'content': self.content,
-            'number_of_points': self.number_of_points,
-            'answers': self.answers,
-            'correct_answers': self.correct_answers
-        }
     
     def to_json(self):
         return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
+    
+    @staticmethod
+    def read_from_dict(q_dict):
+        result = MultipleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
+        result.answers = q_dict['answers']
+        return result
+    
