@@ -1,15 +1,17 @@
 from abc import ABC, abstractmethod
-import string, re, os, sys
+import string, re, os, sys, json
 from pathlib import Path
+from dataclasses import asdict, dataclass
 
 
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
 MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 
-
+# 
+# @dataclass
 class Question(ABC):
 
-    def __init__(self, content, answers : list, number_of_points=1):
+    def __init__(self, content, answers : list, number_of_points=1.0):
         self.content = content
         self.number_of_points = number_of_points
         self.answers : dict = self.convert_answers_to_show_form(answers)
@@ -20,16 +22,14 @@ class Question(ABC):
         for answer in self.answers.values():
             result += f'\t {answer}\n'
         return result[:-1]
-    
-    @staticmethod
-    def load_from_string(question_str):
-        lines = question_str.splitlines()
-        if re.search(r"SQ\d+", lines[0]):
-            return SingleChoiceQuestion.load_from_string(lines)
-        elif re.search(r"MQ\d+", lines[0]):
-            return MultipleChoiceQuestion.load_from_string(lines)
-        else:
-            raise ValueError("Invalid input of question string")
+
+    # def adjust_dict(self):
+    #     result_dict = {}
+    #     for key in self.answers:
+    #         # result_dict[key] = self.answers[key][3:]
+    #         result_dict[key] = self.answers[key]
+
+    #     return result_dict
 
 
     @abstractmethod
@@ -42,31 +42,20 @@ class Question(ABC):
         pass
 
 
-    def convert_answers_to_show_form(self, answers):
-        answers_dict = {}
-        for answer, letter in zip(answers, list(string.ascii_uppercase)):
-            answers_dict[letter] = f'{letter}) {answer}'
-
-        return answers_dict
-    
-    def show_answers(self):
-        print(self.answers)
-        
-
     @abstractmethod
     def get_correct_answers(self):
         pass
 
-    def save_question_into_file(self, path, file_name):
-        full_path = Path(f'{path}{os.sep}{file_name}')
-        try:
-            with open(full_path, 'w+', encoding='utf-8') as file:
-                file.write(str(self.convert_to_file_form()) + '\n')
-                return True
-        except FileNotFoundError:
-            sys.stderr.write(f'File not found (Path: {full_path})\n')
-            return False    
-    
+    @staticmethod
+    def load_from_string(question_str):
+        lines = question_str.splitlines()
+        if re.search(r"SQ\d+", lines[0]):
+            return SingleChoiceQuestion.load_from_string(lines)
+        elif re.search(r"MQ\d+", lines[0]):
+            return MultipleChoiceQuestion.load_from_string(lines)
+        else:
+            raise ValueError("Invalid input of question string")
+        
     @staticmethod
     def read_question_from_file(path):
         try:
@@ -80,14 +69,57 @@ class Question(ABC):
             sys.stderr.write(f'File not found (Path: {path})\n')
             return None
 
+    def convert_answers_to_show_form(self, answers):
+        answers_dict = {}
+        for answer, letter in zip(answers, list(string.ascii_uppercase)):
+            answers_dict[letter] = f'{letter}) {answer}'
+
+        return answers_dict
+    
+    def show_answers(self):
+        print(self.answers)
+        
+
+
+    def save_question_into_file(self, path, file_name):
+        full_path = Path(f'{path}{os.sep}{file_name}')
+        try:
+            with open(full_path, 'w+', encoding='utf-8') as file:
+                file.write(str(self.convert_to_file_form()) + '\n')
+                return True
+        except FileNotFoundError:
+            sys.stderr.write(f'File not found (Path: {full_path})\n')
+            return False    
+        
+    @staticmethod
+    def read_from_dict(q_dict):
+        if q_dict['type'] == 'SQ':
+            print(q_dict['answers'])
+            return SingleChoiceQuestion.read_from_dict(q_dict)
+        elif q_dict['type'] == 'MQ':
+            return MultipleChoiceQuestion.read_from_dict(q_dict)
+        else:
+            raise ValueError("Unknown type of question!!!")
 
 
 
+
+@dataclass
 class SingleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
         super().__init__(content, answers, number_of_points)
         self.correct_answer = correct_answer
+
+    def __dict__(self):
+        return {
+            'type': 'SQ',
+            'content': self.content,
+            'number_of_points': self.number_of_points,
+            'answers': self.answers,
+            'correct_answers': self.correct_answer
+        }
+
 
     @staticmethod
     def load_from_string(lines):
@@ -156,15 +188,35 @@ class SingleChoiceQuestion(Question):
 
     def get_correct_answers(self):
         return [self.correct_answer]
+    
+
+    
+    @staticmethod
+    def read_from_dict(q_dict):
+        result = SingleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
+        result.answers = q_dict['answers']
+        return result
+    
+    def to_json(self):
+        return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
 
  
 
-
+@dataclass
 class MultipleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answers, number_of_points : int = 1):
         super().__init__(content, answers, number_of_points)
         self.correct_answers = correct_answers
+
+    def __dict__(self):
+        return {
+            'type': 'MQ',
+            "content": self.content,
+            'answers': self.answers,
+            "correct_answers": self.correct_answers,
+            "number_of_points": self.number_of_points
+        }
 
     @staticmethod
     def load_from_string(lines):
@@ -233,3 +285,14 @@ class MultipleChoiceQuestion(Question):
     
     def get_correct_answers(self):
         return self.correct_answers.copy()
+    
+    
+    def to_json(self):
+        return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
+    
+    @staticmethod
+    def read_from_dict(q_dict):
+        result = MultipleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
+        result.answers = q_dict['answers']
+        return result
+    

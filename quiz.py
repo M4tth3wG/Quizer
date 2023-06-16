@@ -1,17 +1,27 @@
-import os, random
+import os, random, json
 from questions import Question
 from attempt import Attempt
 from itertools import repeat
 from exceptions import NotPreparedQuizException, BlockedQuizException, QuizException
+from database_support import load_score_to_base, create_empty_db, find_all_scores_for_quiz
+from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
+from datetime import datetime
+from dataclasses import dataclass
 
 
 GENTLE_MODE = 1
 RELENTLESS_MODE = 0
 
+RESULT_DATABASE_FILE = r'scores_database.db'
+RESULT_DATABASE_FOLDER = r'./quiz_results'
 
+@dataclass
 class Quiz:
 
-    def __init__(self, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
+    def __init__(self, name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
+        self.name = name
         self.questions_bank = questions_bank
         self.last_attempt = Attempt()
         self.mode = mode
@@ -19,6 +29,17 @@ class Quiz:
         self.is_ready = False
         self.is_blocked = True
         self.number_of_question_repetition = number_of_question_repetition
+
+    @staticmethod
+    def read_quiz_from_folder(path_to_file):
+        loaded_questions = []
+        ...
+        return Quiz(loaded_questions)
+    
+    
+    def save_quiz_to_file(file_name, path=r'.') :
+        ...
+        # file = open(f'{path}{os.sep}{name}.txt')
 
     def clear_question_bank(self):
         self.questions_bank = []
@@ -35,11 +56,6 @@ class Quiz:
 
     def add_question(self, new_question):
         self.questions_bank.append(new_question)
-
-
-    def save_quiz_to_file(name, path=r'.') :
-        ...
-        # file = open(f'{path}{os.sep}{name}.txt')
 
 
     def prepare_quiz(self):
@@ -71,16 +87,71 @@ class Quiz:
         else:
             raise QuizException('Question has already been answered!!!')
         
-
-
-    @staticmethod
-    def read_quiz_from_folder(path_to_file):
-        loaded_questions = []
-        ...
-        return Quiz(loaded_questions)
     
     def check_emptiness_question_list(self):
         return len(self.last_attempt.questions) == 0
     
     def get_score(self):
         return self.last_attempt.get_total_score()
+    
+    def get_max_points(self):
+        return self.last_attempt.get_max_points()
+    
+    def save_scores(self):
+        if not os.path.join(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE):
+            create_empty_db(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE)
+
+        load_score_to_base(self.name, self.get_score(), self.get_max_points(), f'{RESULT_DATABASE_FOLDER}{os.sep}{RESULT_DATABASE_FILE}')
+
+    def read_scores(self):
+        scored_points, max_points, dates = [],[],[]
+
+        for score in find_all_scores_for_quiz(self.name, f'{RESULT_DATABASE_FOLDER}{os.sep}{RESULT_DATABASE_FILE}'):
+            scored_points.append(score.scored_points)
+            max_points.append(score.max_points)
+            dates.append(score.date)
+
+        # Tworzenie wykresu
+        plt.plot(dates, scored_points, marker='o', linestyle='-', label='Punkty zdobyte')
+        plt.plot(dates, max_points, marker='o', linestyle='-', label='Maksymalne punkty')
+        plt.xlabel('Data')
+        plt.ylabel('Liczba punktów')
+        plt.title('Postęp w nauce')
+        plt.legend()
+
+        # Konfiguracja osi czasu
+        date_formatter = DateFormatter('%Y-%m-%d')
+        plt.gca().xaxis.set_major_formatter(date_formatter)
+        plt.gca().xaxis.set_major_locator(plt.MaxNLocator(5))
+
+        # Wyświetlanie wykresu
+        plt.tight_layout()
+        plt.show()
+
+    def load_from_json(self,file_name):
+        with open(file_name, 'r', encoding='utf-8') as file:
+            data = json.loads(file.read())
+
+            self.name = data['name']
+            self.questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
+            self.mode = data['mode']
+            self.shuffle = data['shuffle']
+            self.isReady = data['isReady'] 
+            self.isBlocked = data ['isBlocked']
+            self.number_of_question_repetition = data['number_of_question_repetition']
+
+            print(self.questions_bank)
+
+            # return Quiz(name, question_bank, mode, shuffle, number_of_question_repetition)
+
+    def to_json(self):
+        quiz_dict = {
+            'name': self.name,
+            'question_bank': [question.__dict__() for question in self.questions_bank],
+            'mode': self.mode,
+            'shuffle': self.shuffle,
+            'isReady': False, 
+            'isBlocked': True,
+            'number_of_question_repetition': self.number_of_question_repetition
+        }
+        return json.dumps(quiz_dict, indent=4, ensure_ascii=False)
