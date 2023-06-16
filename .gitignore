@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 questions_txt/*.txt
+quiz_results/*.db

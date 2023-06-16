@@ -25,6 +25,12 @@ class Attempt:
         self.score = score
         return score
     
+    def get_max_points(self):
+        points = 0
+        for question in self.questions:
+            points += question.number_of_points
+        return points
+    
     def add_question_list(self, questions):
         self.questions = questions
         self.given_answers = []

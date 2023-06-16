@@ -63,7 +63,7 @@ def main():
     # x3.show_answers()
     # x4.show_answers()
 
-    quiz = Quiz([x1,x2,x3,x4])
+    quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
     quiz.prepare_quiz()
 
     correct_answers = [[2], [1,2,3], [2], [3,4]]
@@ -83,6 +83,15 @@ def main():
 
     print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test001.txt')))
     print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test002.txt')))
+
+    quiz.save_scores()
+    quiz.read_scores()
+
+
+    quiz2 = Quiz('my_second_quiz', [x1,x2,x3,x4])
+    quiz2.save_scores()
+    # quiz2.read_scores()
+
 
 
 

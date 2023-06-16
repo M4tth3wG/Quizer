@@ -9,7 +9,7 @@ MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 
 class Question(ABC):
 
-    def __init__(self, content, answers : list, number_of_points=1):
+    def __init__(self, content, answers : list, number_of_points=1.0):
         self.content = content
         self.number_of_points = number_of_points
         self.answers : dict = self.convert_answers_to_show_form(answers)
@@ -21,16 +21,6 @@ class Question(ABC):
             result += f'\t {answer}\n'
         return result[:-1]
     
-    @staticmethod
-    def load_from_string(question_str):
-        lines = question_str.splitlines()
-        if re.search(r"SQ\d+", lines[0]):
-            return SingleChoiceQuestion.load_from_string(lines)
-        elif re.search(r"MQ\d+", lines[0]):
-            return MultipleChoiceQuestion.load_from_string(lines)
-        else:
-            raise ValueError("Invalid input of question string")
-
 
     @abstractmethod
     def convert_to_file_form(self):
@@ -42,31 +32,20 @@ class Question(ABC):
         pass
 
 
-    def convert_answers_to_show_form(self, answers):
-        answers_dict = {}
-        for answer, letter in zip(answers, list(string.ascii_uppercase)):
-            answers_dict[letter] = f'{letter}) {answer}'
-
-        return answers_dict
-    
-    def show_answers(self):
-        print(self.answers)
-        
-
     @abstractmethod
     def get_correct_answers(self):
         pass
 
-    def save_question_into_file(self, path, file_name):
-        full_path = Path(f'{path}{os.sep}{file_name}')
-        try:
-            with open(full_path, 'w+', encoding='utf-8') as file:
-                file.write(str(self.convert_to_file_form()) + '\n')
-                return True
-        except FileNotFoundError:
-            sys.stderr.write(f'File not found (Path: {full_path})\n')
-            return False    
-    
+    @staticmethod
+    def load_from_string(question_str):
+        lines = question_str.splitlines()
+        if re.search(r"SQ\d+", lines[0]):
+            return SingleChoiceQuestion.load_from_string(lines)
+        elif re.search(r"MQ\d+", lines[0]):
+            return MultipleChoiceQuestion.load_from_string(lines)
+        else:
+            raise ValueError("Invalid input of question string")
+        
     @staticmethod
     def read_question_from_file(path):
         try:
@@ -79,6 +58,30 @@ class Question(ABC):
         except FileNotFoundError:
             sys.stderr.write(f'File not found (Path: {path})\n')
             return None
+
+    def convert_answers_to_show_form(self, answers):
+        answers_dict = {}
+        for answer, letter in zip(answers, list(string.ascii_uppercase)):
+            answers_dict[letter] = f'{letter}) {answer}'
+
+        return answers_dict
+    
+    def show_answers(self):
+        print(self.answers)
+        
+
+
+    def save_question_into_file(self, path, file_name):
+        full_path = Path(f'{path}{os.sep}{file_name}')
+        try:
+            with open(full_path, 'w+', encoding='utf-8') as file:
+                file.write(str(self.convert_to_file_form()) + '\n')
+                return True
+        except FileNotFoundError:
+            sys.stderr.write(f'File not found (Path: {full_path})\n')
+            return False    
+    
+
 
 
 
