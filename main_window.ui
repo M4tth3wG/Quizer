@@ -72,6 +72,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="create_new_quiz_btn">
+      <property name="text">
+       <string>Stwórz nowy quiz</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="browse_saved_attempts_btn">
       <property name="text">
        <string>Przeglądaj zapisane podejścia</string>

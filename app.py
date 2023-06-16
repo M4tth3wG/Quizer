@@ -25,6 +25,7 @@ class MenuWindow(QMainWindow):
             file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
             loaded_quiz = quiz.Quiz.read_quiz_from_folder(file_path)
             self.quiz_window = QuizWindow(loaded_quiz)
+            self.quiz_window.quit_btn.clicked.connect(self.show)
             self.quiz_window.show()
             self.close()
         except:

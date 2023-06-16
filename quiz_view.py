@@ -9,3 +9,10 @@ class QuizWindow(QMainWindow):
 
         self.setFixedWidth(800)
         self.setFixedHeight(600)
+        self.quiz_window_views.setCurrentIndex(0)
+
+        self.start_quiz_btn.clicked.connect(self.start_quiz)
+        self.quit_btn.clicked.connect(self.close)
+
+    def start_quiz(self):
+        self.quiz_window_views.setCurrentIndex(1)
