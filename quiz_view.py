@@ -21,27 +21,22 @@ class QuizWindow(QMainWindow):
         self.start_quiz_btn.clicked.connect(self.start_quiz)
         self.quit_btn.clicked.connect(self.close)
         self.confirm_btn.clicked.connect(self.confirm_answer)
+        self.next_question_btn.clicked.connect(self.load_question)
 
     def start_quiz(self):
+        self.quiz.prepare_quiz()
         self.quiz_window_views.setCurrentIndex(1)
         self.load_question()
 
     def load_question(self):
-        #current_question = self.quiz.get_question()
-        self.current_question = questions.SingleChoiceQuestion(
-    'Jaki jest cel komunikatów ICMP?',
-    [
-        'Zapewniają poprawne dostarczanie pakietu IP do odbiorcy',
-        'Dostarczają informacji zwrotnych o transmisjach pakietów IP',
-        'Monitorują proces zamiany adresów domenowych na adresy IP',
-        'Informują routery o zmianach topologii sieci'
-    ],
-    2
-)
+        self.next_question_btn.setEnabled(False)
+        self.current_question = self.quiz.get_question()
         self.question_text_edit.setPlainText(self.current_question.content)
         self.load_answers()
 
     def load_answers(self):
+        self.clear_answers()
+
         if isinstance(self.current_question, questions.SingleChoiceQuestion):
             self.load_single_choice_answers()
         else:
@@ -98,6 +93,32 @@ class QuizWindow(QMainWindow):
 
     def confirm_answer(self):
         self.quiz.check_answer(self.get_answers_from_buttons())
+        self.display_correct_answers()
+        self.confirm_btn.setEnabled(False)
+
+    def display_correct_answers(self):
+        for btn in self.answer_btns:
+            btn.setEnabled(False)
+
+            if btn.isChecked():
+                btn.setStyleSheet(btn.styleSheet() + "background-color: #ff0000;")
+
+        for index in self.current_question.get_correct_answers():
+            btn = self.answer_btns[index]
+
+            if btn.isChecked():
+                btn.setStyleSheet(btn.styleSheet() + "background-color: #008000;")
+            else:
+                btn.setStyleSheet(btn.styleSheet() + "background-color: #ffff00;")
+
+        self.next_question_btn.setEnabled(True)
 
     def get_answers_from_buttons(self):
         return [index for index, button in enumerate(self.answer_btns)]
+    
+    def clear_answers(self):
+        for btn in self.answer_btns:
+            self.answer_layout.removeWidget(btn)
+            btn.deleteLater()
+        
+        self.answer_btns.clear()
