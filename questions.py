@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import string, re, os, sys, json
 from pathlib import Path
 from dataclasses import asdict, dataclass
+from exceptions import  IncorrectAnswersNumberException
 
 
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
@@ -131,7 +132,7 @@ class SingleChoiceQuestion(Question):
                     if loaded_correct_answer_index == -1:
                         loaded_correct_answer_index = index+1
                     else:
-                        raise ValueError('Found more than one correct answer!!!')
+                        raise IncorrectAnswersNumberException('Found more than one correct answer!!!')
                     
             if loaded_correct_answer_index == -1: raise ValueError("No correct answer found")
 
@@ -150,7 +151,7 @@ class SingleChoiceQuestion(Question):
                     break
 
             if len(loaded_answers) != len(answers_as_digits):
-                raise ValueError('Incompatible number of answers!!!')
+                raise IncorrectAnswersNumberException('Incompatible number of answers!!!')
             
             
             return SingleChoiceQuestion(loaded_content, loaded_answers, loaded_correct_answer_index)
@@ -227,7 +228,7 @@ class MultipleChoiceQuestion(Question):
                 if digit == '1':
                     loaded_correct_answer_indexes.append(index+1)
                     
-            if len(loaded_correct_answer_indexes) < 2: raise ValueError('Not enough correct answers found')
+            if len(loaded_correct_answer_indexes) < 2: raise IncorrectAnswersNumberException('Not enough correct answers found')
 
 
             if re.match(r'\S', lines[1].strip()):
@@ -244,7 +245,7 @@ class MultipleChoiceQuestion(Question):
                     break
 
             if len(loaded_answers) != len(answers_as_digits):
-                raise ValueError('Incompatible number of answers!!!')
+                raise IncorrectAnswersNumberException('Incompatible number of answers!!!')
             
             
             return MultipleChoiceQuestion(loaded_content, loaded_answers, loaded_correct_answer_indexes)
