@@ -9,11 +9,20 @@ from datetime import datetime, date
 
 
 ALL_QUIZZES_FILE_PATH = r'quizzes\all_quizes.txt'
+ALL_QUIZZES_DATABASE = r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_results\scores_database.db'
 
 def create_empty_db(path, db_name):
 
     engine = create_engine(f'sqlite:///{path}{os.sep}{db_name}')
     Base.metadata.create_all(bind=engine)
+
+def check_quiz_exists(input_quiz_name):
+    engine = create_engine(f'sqlite:///{ALL_QUIZZES_DATABASE}')
+    Base.metadata.create_all(engine)
+
+    with Session(engine, autoflush=False) as session:
+        quiz = session.query(QuizDB).filter_by(quiz_name=input_quiz_name).first()
+        return quiz != None
 
 
 def check_quiz(input_quiz_name, session) -> QuizDB:
@@ -23,15 +32,15 @@ def check_quiz(input_quiz_name, session) -> QuizDB:
         session.add(quiz)
         session.commit()
 
-    try:
-        with open(ALL_QUIZZES_FILE_PATH, "r+", encoding='utf-8') as file:
-                lines = file.readlines()
-                found = any(input_quiz_name in line for line in lines)
+    # try:
+    #     with open(ALL_QUIZZES_FILE_PATH, "r+", encoding='utf-8') as file:
+    #             lines = file.readlines()
+    #             found = any(input_quiz_name in line for line in lines)
 
-                if not found:
-                    file.write(input_quiz_name + '\n')
-    except FileNotFoundError:
-        sys.stderr.write(f'File not found (Path: {ALL_QUIZZES_FILE_PATH})\n')
+    #             if not found:
+    #                 file.write(input_quiz_name + '\n')
+    # except FileNotFoundError:
+    #     sys.stderr.write(f'File not found (Path: {ALL_QUIZZES_FILE_PATH})\n')
     return quiz
 
 

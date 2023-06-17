@@ -13,24 +13,16 @@ MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 class Question(ABC):
 
     def __init__(self, content, answers : list, number_of_points=1.0):
-        self.content = content
-        self.number_of_points = number_of_points
-        self.answers : dict = self.convert_answers_to_show_form(answers)
+        self._content = content
+        self._number_of_points = number_of_points
+        self._answers : dict = self.convert_answers_to_show_form(answers)
 
 
     def __str__(self):
-        result = f'{self.content}\n'
-        for answer in self.answers.values():
+        result = f'{self._content}\n'
+        for answer in self._answers.values():
             result += f'\t {answer}\n'
         return result[:-1]
-
-    # def adjust_dict(self):
-    #     result_dict = {}
-    #     for key in self.answers:
-    #         # result_dict[key] = self.answers[key][3:]
-    #         result_dict[key] = self.answers[key]
-
-    #     return result_dict
 
 
     @abstractmethod
@@ -73,12 +65,16 @@ class Question(ABC):
     def convert_answers_to_show_form(self, answers):
         answers_dict = {}
         for answer, letter in zip(answers, list(string.ascii_uppercase)):
-            answers_dict[letter] = f'{letter}) {answer}'
+            pattern = rf'^[{letter}]\)\s.*?$'
+            if re.match(pattern, answer):
+                answers_dict[letter] = answer
+            else: 
+                answers_dict[letter] = f'{letter}) {answer}'
 
         return answers_dict
     
     def show_answers(self):
-        print(self.answers)
+        print(self._answers)
         
 
 
@@ -110,15 +106,15 @@ class SingleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
         super().__init__(content, answers, number_of_points)
-        self.correct_answer = correct_answer
+        self._correct_answer = correct_answer
 
     def __dict__(self):
         return {
             'type': 'SQ',
-            'content': self.content,
-            'number_of_points': self.number_of_points,
-            'answers': self.answers,
-            'correct_answers': self.correct_answer
+            'content': self._content,
+            'number_of_points': self._number_of_points,
+            'answers': self._answers,
+            'correct_answers': self._correct_answer
         }
 
 
@@ -165,16 +161,16 @@ class SingleChoiceQuestion(Question):
     def convert_to_file_form(self):
         result = SINGLE_CHOICE_QUESTION_HEADER
 
-        for answer_index in range(1, len(self.answers)+1):
-            if self.correct_answer == answer_index:
+        for answer_index in range(1, len(self._answers)+1):
+            if self._correct_answer == answer_index:
                 result += '1' 
             else :
                 result += '0'
 
-        result += f'\n{self.content}\n'
+        result += f'\n{self._content}\n'
 
         for key in self.answers.keys():
-            result += f'\t{self.answers[key][3:]}\n'
+            result += f'\t{self._answers[key][3:]}\n'
 
         return result
     
@@ -182,13 +178,13 @@ class SingleChoiceQuestion(Question):
     def check_answer(self, input_answer):
 
         if len(input_answer) == 1:
-            return self.number_of_points if self.correct_answer == input_answer[0] else 0
+            return self._number_of_points if self._correct_answer == input_answer[0] else 0
         else:
             return 0
         
 
     def get_correct_answers(self):
-        return [self.correct_answer]
+        return [self._correct_answer]
     
 
     
@@ -208,15 +204,19 @@ class MultipleChoiceQuestion(Question):
 
     def __init__(self, content, answers : list, correct_answers, number_of_points : int = 1):
         super().__init__(content, answers, number_of_points)
-        self.correct_answers = correct_answers
+        if len(answers) < len(correct_answers):
+            raise IncorrectAnswersNumberException('Incompatible number of answers!!!')
+        if len(correct_answers) < 2: 
+            raise IncorrectAnswersNumberException('Not enough correct answers found')
+        self._correct_answers = correct_answers
 
     def __dict__(self):
         return {
             'type': 'MQ',
-            "content": self.content,
-            'answers': self.answers,
-            "correct_answers": self.correct_answers,
-            "number_of_points": self.number_of_points
+            "content": self._content,
+            'answers': self._answers,
+            "correct_answers": self._correct_answers,
+            "number_of_points": self._number_of_points
         }
 
     @staticmethod
@@ -257,43 +257,41 @@ class MultipleChoiceQuestion(Question):
     def convert_to_file_form(self):
         result = MULTIPLE_CHOICE_QUESTION_HEADER
 
-        for answer_index in range(1, len(self.answers)+1):
+        for answer_index in range(1, len(self._answers)+1):
             digit_to_concat = '0'
-            for correct_answer_index in self.correct_answers:
+            for correct_answer_index in self._correct_answers:
                 if correct_answer_index == answer_index:
                     digit_to_concat = '1'
                     break
             result += digit_to_concat
 
-        result += f'\n{self.content}\n'
+        result += f'\n{self._content}\n'
 
-        for key in self.answers.keys():
-            result += f'\t{self.answers[key][3:]}\n'
+        for key in self._answers.keys():
+            result += f'\t{self._answers[key][3:]}\n'
 
         return result
     
     def check_answer(self, input_answers):
-        if len(input_answers) > len(self.correct_answers):
+        if len(input_answers) > len(self._correct_answers):
             return 0
         actual_correct_answers = 0
-        for correct_answer in self.correct_answers:
+        for correct_answer in self._correct_answers:
             if correct_answer in input_answers:
                 actual_correct_answers += 1
             
         # return actual_correct_answers/max(len(self.correct_answers), len(input_answers)) * self.number_of_points
-        return actual_correct_answers/len(self.correct_answers)* self.number_of_points
+        return actual_correct_answers/len(self._correct_answers)* self._number_of_points
     
-    
+
     def get_correct_answers(self):
-        return self.correct_answers.copy()
-    
+        return self._correct_answers.copy()
+
     
     def to_json(self):
         return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
     
     @staticmethod
     def read_from_dict(q_dict):
-        result = MultipleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
-        result.answers = q_dict['answers']
-        return result
+        return MultipleChoiceQuestion(q_dict['content'], q_dict['answers'].values(), q_dict['correct_answers'], q_dict['number_of_points'])
     

@@ -22,7 +22,14 @@ class QuizException(Exception):
         self.message = message
 
     def __str__(self):
-        return f'BlockedQuizException: {self.message}'
+        return f'QuizException: {self.message}'
+    
+class DuplicatedQuizNameException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'DuplicatedQuizNameException: {self.message}'
     
 
 class EndQuestionException(Exception):
