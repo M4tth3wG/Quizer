@@ -9,7 +9,7 @@ from datetime import datetime, date
 
 
 ALL_QUIZZES_FILE_PATH = r'quizzes\all_quizes.txt'
-ALL_QUIZZES_DATABASE = r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_results\scores_database.db'
+ALL_QUIZZES_DATABASE = r'.\quiz_results\scores_database.db'
 
 def create_empty_db(path, db_name):
 
@@ -32,17 +32,6 @@ def check_quiz(input_quiz_name, session):
         session.add(quiz)
         session.commit()
         is_new_Quiz = True
-
-    # try:
-    #     with open(ALL_QUIZZES_FILE_PATH, "r+", encoding='utf-8') as file:
-    #             lines = file.readlines()
-    #             found = any(input_quiz_name in line for line in lines)
-
-    #             if not found:
-    #                 file.write(input_quiz_name + '\n')
-    # except FileNotFoundError:
-    #     sys.stderr.write(f'File not found (Path: {ALL_QUIZZES_FILE_PATH})\n')
-    print(is_new_Quiz)
     return quiz, is_new_Quiz
 
 
@@ -51,7 +40,6 @@ def check_quiz(input_quiz_name, session):
 def load_score_to_base(quiz_name, input_scored_points, input_max_points, db_path):
     engine = create_engine(f'sqlite:///{db_path}')
     Base.metadata.create_all(engine)
-
 
     with Session(engine, autoflush=False) as session:
                   
