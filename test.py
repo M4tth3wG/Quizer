@@ -16,7 +16,7 @@ def main():
             'Monitorują proces zamiany adresów domenowych na adresy IP',
             'Informują routery o zmianach topologii sieci'
         ],
-        2
+        1
     )
 
     x2 = MultipleChoiceQuestion(
@@ -28,7 +28,7 @@ def main():
         	'W celu poprawy wydajności sieci',
 	        'W celu redukcji liczby potrzebnych przełączników'
        ],
-       [3,4]
+       [2,3]
     )
 
     x3 = Question.load_from_string(

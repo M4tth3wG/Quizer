@@ -194,7 +194,7 @@ class SingleChoiceQuestion(Question):
     def convert_to_file_form(self):
         result = SINGLE_CHOICE_QUESTION_HEADER
 
-        for answer_index in range(1, len(self._answers)+1):
+        for answer_index in range(len(self._answers)):
             if self._correct_answer == answer_index:
                 result += '1' 
             else :
@@ -230,10 +230,10 @@ class SingleChoiceQuestion(Question):
         return json.dumps(self.__dict__(), indent=2, ensure_ascii=False)
     
     def shuffle_answers(self):
-        correct_answer = self.answers[string.ascii_uppercase[self._correct_answer-1]][3:]
+        correct_answer = self.answers[string.ascii_uppercase[self._correct_answer]][3:]
         shuffled_answers = [answer[3:] for answer in self.answers.values()]
         random.shuffle(shuffled_answers)
-        correct_answer_index = shuffled_answers.index(correct_answer)+1
+        correct_answer_index = shuffled_answers.index(correct_answer)
         return SingleChoiceQuestion(self.content, shuffled_answers, correct_answer_index, self.number_of_points)
 
  
@@ -262,6 +262,12 @@ class MultipleChoiceQuestion(Question):
             raise IncorrectAnswersNumberException('Incompatible number of answers!!!')
         if len(correct_answers) < 2: 
             raise IncorrectAnswersNumberException('Not enough correct answers found')
+        
+        for num in correct_answers:
+            if num >= len(answers):
+                raise IndexError()
+
+
         self._correct_answers = correct_answers
 
     def __dict__(self):
@@ -311,7 +317,7 @@ class MultipleChoiceQuestion(Question):
     def convert_to_file_form(self):
         result = MULTIPLE_CHOICE_QUESTION_HEADER
 
-        for answer_index in range(1, len(self._answers)+1):
+        for answer_index in range(len(self._answers)):
             digit_to_concat = '0'
             for correct_answer_index in self._correct_answers:
                 if correct_answer_index == answer_index:
@@ -351,7 +357,7 @@ class MultipleChoiceQuestion(Question):
     
     def shuffle_answers(self):
         to_shuffle = []
-        for index, answer in zip(range(1,len(self.answers.values())+1), self._answers.values()):
+        for index, answer in zip(range(len(self.answers.values())), self._answers.values()):
             if index in self._correct_answers:
                 to_shuffle.append((index, answer[3:]))
             else:
@@ -360,7 +366,7 @@ class MultipleChoiceQuestion(Question):
         random.shuffle(to_shuffle)
 
         correct_answers, answers = [], []
-        for (old_index, answer), new_index in zip(to_shuffle, range(1,len(self.answers.values())+1)):
+        for (old_index, answer), new_index in zip(to_shuffle, range(len(self.answers.values()))):
             if old_index != -1:
                 correct_answers.append(new_index)
             answers.append(answer)
