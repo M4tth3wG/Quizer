@@ -21,7 +21,7 @@ RESULT_DATABASE_FOLDER = rf'.{os.sep}quiz_results'
 @dataclass
 class Quiz:
 
-    def __init__(self, name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
+    def __init__(self, name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False, shuffle_answers=False):
         if number_of_question_repetition <= 0:
             raise ValueError("Number of question repetition must be positive number!!!")
 
@@ -33,6 +33,7 @@ class Quiz:
         self._is_ready = False
         self._is_blocked = True
         self._number_of_question_repetition = number_of_question_repetition
+        self._shuffle_answers = shuffle_answers
 
     @staticmethod
     def create_new_quiz(name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
@@ -60,7 +61,10 @@ class Quiz:
 
 
     def prepare_quiz(self):
-        self._last_attempt.add_question_list([question for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
+        if self.shuffle_answers:
+            self._last_attempt.add_question_list([question.shuffle_answers() for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
+        else:
+            self._last_attempt.add_question_list([question for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
         if self.shuffle:
             random.shuffle(self._last_attempt._questions)
         self._is_ready, self._is_blocked = True, False
@@ -117,6 +121,14 @@ class Quiz:
     @shuffle.setter
     def shuffle(self, new_shuffle):
         self._shuffle = new_shuffle
+
+    @property
+    def shuffle_answers(self):
+        return self._shuffle_answers
+    
+    @shuffle_answers.setter
+    def shuffle(self, new_shuffle):
+        self._shuffle_answers = new_shuffle
 
     @property
     def questions_bank(self):
