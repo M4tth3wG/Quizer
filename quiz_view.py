@@ -4,22 +4,27 @@ from pathlib import Path
 from quiz import Quiz
 import questions
 from functools import partial
+import exceptions
 
 class QuizWindow(QMainWindow):
     current_question = None
     answer_btns = []
     
-    def __init__(self, quiz: Quiz):
+    def __init__(self, quiz: Quiz, main_window):
         super(QuizWindow, self).__init__()
         uic.loadUi(Path('quiz_gui.ui'), self)
 
         self.quiz = quiz
+        self.main_window = main_window
         self.setFixedWidth(800)
         self.setFixedHeight(600)
         self.quiz_window_views.setCurrentIndex(0)
 
         self.start_quiz_btn.clicked.connect(self.start_quiz)
         self.quit_btn.clicked.connect(self.close)
+        self.quit_btn.clicked.connect(self.main_window.show)
+        self.quiz_back_to_menu_btn.clicked.connect(self.main_window.show)
+        self.quiz_back_to_menu_btn.clicked.connect(self.close)
         self.confirm_btn.clicked.connect(self.confirm_answer)
         self.next_question_btn.clicked.connect(self.load_question)
 
@@ -29,10 +34,25 @@ class QuizWindow(QMainWindow):
         self.load_question()
 
     def load_question(self):
-        self.next_question_btn.setEnabled(False)
-        self.current_question = self.quiz.get_question()
-        self.question_text_edit.setPlainText(self.current_question.content)
-        self.load_answers()
+        try:
+            self.next_question_btn.setEnabled(False)
+            self.current_question = self.quiz.get_question()
+            self.question_text_edit.setPlainText(self.current_question.content)
+            self.update_progress_bar()
+            self.update_question_type_label()
+            self.load_answers()
+        except exceptions.EndQuestionException:
+            self.quiz_window_views.setCurrentIndex(2)
+
+    def update_progress_bar(self):
+        #self.progress_text_edit.setText(f'{}/{}')
+        pass
+
+    def update_question_type_label(self):
+        if isinstance(self.current_question, questions.SingleChoiceQuestion):
+            self.question_type_label.setText('Jednokrotnego wyboru')
+        else:
+            self.question_type_label.setText('Wielokrotnego wyboru')
 
     def load_answers(self):
         self.clear_answers()

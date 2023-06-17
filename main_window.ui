@@ -50,6 +50,12 @@
         <height>50</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string># Menu</string>
       </property>

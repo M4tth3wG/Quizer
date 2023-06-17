@@ -24,10 +24,8 @@ class MenuWindow(QMainWindow):
     def load_quiz(self):
         try:
             file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
-            loaded_quiz = quiz.Quiz('Default_name', [])
-            loaded_quiz.load_from_json(file_path)
-            self.quiz_window = QuizWindow(loaded_quiz)
-            self.quiz_window.quit_btn.clicked.connect(self.show)
+            loaded_quiz = quiz.Quiz.load_from_json(file_path)
+            self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
             self.close()
         except:

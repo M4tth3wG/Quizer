@@ -61,7 +61,7 @@ class Quiz:
     def prepare_quiz(self):
         self.last_attempt.add_question_list([question for question in self.questions_bank for _ in repeat(None, self.number_of_question_repetition)])
         if self.shuffle:
-            random.shuffle(self.question)
+            random.shuffle(self.last_attempt.questions)
         self.is_ready, self.is_blocked = True, False
 
 
