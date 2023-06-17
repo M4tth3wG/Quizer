@@ -87,16 +87,16 @@ def main():
     print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test001.txt')))
     print(Question.read_question_from_file(Path(r'C:\Users\trine\OneDrive\Pulpit\Quizer\questions_txt\test002.txt')))
 
-    quiz.save_scores()
-    quiz.read_scores()
+    # quiz.save_scores()
+    # quiz.read_scores()
 
 
     quiz2 = Quiz('my_second_quiz', [x1,x2,x3,x4])
+    print(SPLIT_LINE)
     quiz2.save_scores()
+
     # quiz2.read_scores()
 
-
-    print(x3.answers.values())
 
 
 

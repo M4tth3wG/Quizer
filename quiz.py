@@ -123,7 +123,10 @@ class Quiz:
         return copy.copy(self._questions_bank)
     
     def get_score(self):
-        return self._last_attempt.actual_score
+        if type(self._last_attempt.actual_score) == float and self._last_attempt.actual_score.is_integer():
+            return int(self._last_attempt.actual_score)
+        else:
+            return self._last_attempt.actual_score
     
     def get_actual_max_points(self):
         return self._last_attempt._actual_max_points
@@ -140,7 +143,6 @@ class Quiz:
     def save_scores(self):
         if not os.path.join(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE):
             create_empty_db(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE)
-
         load_score_to_base(self._name, self.get_score(), self.get_total_max_points(), f'{RESULT_DATABASE_FOLDER}{os.sep}{RESULT_DATABASE_FILE}')
 
     def read_scores(self):
