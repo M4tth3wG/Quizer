@@ -51,8 +51,7 @@ class QuizWindow(QMainWindow):
             self.update_quiz_progress_label()
             self.update_question_type_label()
             self.load_answers()
-        #except exceptions.EndQuestionException:
-        except:
+        except exceptions.EndQuestionException:
             self.quiz_window_views.setCurrentIndex(2)
             self.display_final_score()
 
@@ -77,7 +76,7 @@ class QuizWindow(QMainWindow):
             self.load_multiple_choice_answers()
 
     def load_single_choice_answers(self):
-        answers_dict = self.current_question.answers
+        answers_dict = self.current_question._answers
 
         for answer in answers_dict.values():
             answer_btn = QPushButton()
@@ -149,7 +148,13 @@ class QuizWindow(QMainWindow):
         self.next_question_btn.setEnabled(True)
 
     def get_answers_from_buttons(self):
-        return [index for index, button in enumerate(self.answer_btns)]
+        answers_list = []
+        for index, button in enumerate(self.answer_btns):
+            if button.isChecked():
+                answers_list.append(index)
+
+        return answers_list
+
     
     def clear_answers(self):
         for btn in self.answer_btns:

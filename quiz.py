@@ -62,7 +62,7 @@ class Quiz:
     def prepare_quiz(self):
         self._last_attempt.add_question_list([question for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
         if self.shuffle:
-            random.shuffle(self._last_attempt.__questions)
+            random.shuffle(self._last_attempt._questions)
         self._is_ready, self._is_blocked = True, False
 
 
@@ -90,7 +90,7 @@ class Quiz:
         
     
     def check_emptiness_question_list(self):
-        return len(self._last_attempt.questions) == 0
+        return len(self._last_attempt._questions) == 0
     
     @property
     def is_ready(self):
