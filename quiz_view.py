@@ -7,7 +7,7 @@ from functools import partial
 import exceptions
 
 class QuizWindow(QMainWindow):
-    
+
     def __init__(self, quiz: Quiz, main_window):
         super(QuizWindow, self).__init__()
         uic.loadUi(Path('quiz_gui.ui'), self)

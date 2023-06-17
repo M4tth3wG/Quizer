@@ -7,6 +7,7 @@ import sys
 import os
 import quiz
 from quiz_view import QuizWindow
+from quiz_creator import QuizCreatorWindow
 
 class MenuWindow(QMainWindow):
     
@@ -20,6 +21,7 @@ class MenuWindow(QMainWindow):
 
         self.quit_btn.clicked.connect(exit)
         self.load_quiz_btn.clicked.connect(self.load_quiz)
+        self.create_new_quiz_btn.clicked.connect(self.open_quiz_creator)
 
     def load_quiz(self):
         try:
@@ -30,6 +32,11 @@ class MenuWindow(QMainWindow):
             self.close()
         except:
             self.show_error_message('Nieprawidłowy plik quizu!')
+
+    def open_quiz_creator(self):
+        self.quiz_creator_window = QuizCreatorWindow(self)
+        self.quiz_creator_window.show()
+        self.close()
 
     
     def show_error_message(self, message):
