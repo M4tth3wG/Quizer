@@ -33,7 +33,7 @@ x2 = MultipleChoiceQuestion(
 
 
 
-quiz = Quiz("test", [x1,x2])
+quiz = Quiz("test4ee252fsdaf", [x1,x2])
 
 i = 1
 for q in quiz.questions_bank:
