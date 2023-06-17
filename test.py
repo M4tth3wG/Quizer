@@ -70,8 +70,9 @@ def main():
 
     print(SPLIT_LINE)
     for answer in correct_answers:
-        print(quiz.get_question()) 
-        print(quiz.check_answer(answer))
+        print(quiz.get_question())
+        print(f'Input answer: {answer}')
+        print(f'Correct answer: {quiz.check_answer(answer)}')
         print(SPLIT_LINE)
 
     print('Score:', quiz.get_score())
