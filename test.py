@@ -63,15 +63,18 @@ def main():
     # x3.show_answers()
     # x4.show_answers()
 
-    quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
+    # quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
+    quiz = Quiz.load_from_json(r'D:\test_quiz.json')
     quiz.prepare_quiz()
 
-    correct_answers = [[2], [1,2,3], [2], [3,4]]
+    # correct_answers = [[2], [1,2,3], [2], [3,4]]
+    correct_answers = [[2], [3,4]]
 
     print(SPLIT_LINE)
     for answer in correct_answers:
-        print(quiz.get_question()) 
-        print(quiz.check_answer(answer))
+        print(quiz.get_question())
+        print(f'Input answer: {answer}')
+        print(f'Correct answer: {quiz.check_answer(answer)}')
         print(SPLIT_LINE)
 
     print('Score:', quiz.get_score())
@@ -91,6 +94,9 @@ def main():
     quiz2 = Quiz('my_second_quiz', [x1,x2,x3,x4])
     quiz2.save_scores()
     # quiz2.read_scores()
+
+
+    print(x3.answers.values())
 
 
 

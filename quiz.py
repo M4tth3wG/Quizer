@@ -123,7 +123,7 @@ class Quiz:
         return copy.copy(self._questions_bank)
     
     def get_score(self):
-        return self._last_attempt._actual_score
+        return self._last_attempt.actual_score
     
     def get_actual_max_points(self):
         return self._last_attempt._actual_max_points
