@@ -188,7 +188,7 @@
             <item>
              <layout class="QVBoxLayout" name="answer_layout">
               <item>
-               <layout class="QGridLayout" name="answer_grid_layout"/>
+               <layout class="QVBoxLayout" name="answer_vertical_layout"/>
               </item>
               <item>
                <widget class="QPushButton" name="add_answer_btn">
@@ -247,6 +247,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="previous_question_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Poprzednie pytanie</string>
             </property>
@@ -254,6 +257,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="next_question_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Następne pytanie</string>
             </property>
@@ -261,6 +267,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="add_question_button">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Dodaj pytanie</string>
             </property>
