@@ -112,9 +112,9 @@ class SingleChoiceQuestion(Question):
         return {
             'type': 'SQ',
             'content': self._content,
-            'number_of_points': self._number_of_points,
             'answers': self._answers,
-            'correct_answers': self._correct_answer
+            'correct_answers': self._correct_answer,
+            'number_of_points': self._number_of_points
         }
 
 
