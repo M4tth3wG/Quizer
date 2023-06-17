@@ -46,7 +46,7 @@ def load_score_to_base(quiz_name, input_scored_points, input_max_points, db_path
         try:
             quiz, _ = check_quiz(quiz_name, session)
             new_score = Score(
-                                scored_points=input_scored_points,
+                                scored_points=float(input_scored_points),
                                 max_points=input_max_points,
                                 quiz=quiz
                             )

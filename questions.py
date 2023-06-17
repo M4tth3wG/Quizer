@@ -12,7 +12,7 @@ MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 # @dataclass
 class Question(ABC):
 
-    def __init__(self, content, answers : list, number_of_points=1.0):
+    def __init__(self, content, answers : list, number_of_points=1):
         if number_of_points <= 0:
             raise ValueError("Number of points must be positive number!!!")
         self._content = content
