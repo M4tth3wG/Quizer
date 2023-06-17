@@ -54,7 +54,7 @@ class Attempt:
     def get_max_points(self):
         points = 0
         for question in self._questions:
-            points += question.number_of_points
+            points += question._number_of_points
         return points
     
     def add_question_list(self, questions):
@@ -66,7 +66,7 @@ class Attempt:
     def add_answer(self, given_answer):
         if len(self._questions) > len(self._given_answers):
             self._actual_score += self._questions[len(self._given_answers)].check_answer(given_answer)
-            self._actual_max_points += self._questions[len(self._given_answers)].number_of_points
+            self._actual_max_points += self._questions[len(self._given_answers)]._number_of_points
             self._given_answers.append(given_answer)
 
         else:
