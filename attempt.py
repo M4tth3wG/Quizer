@@ -7,7 +7,8 @@ class Attempt:
     def __init__(self):
         self.questions = []
         self.given_answers = []
-        self.score = 0
+        self.actual_score = 0
+        self.actual_max_points = 0
         self.index = 0
 
     def add_question_attempt(self, question, answers):
@@ -16,15 +17,17 @@ class Attempt:
         index = min(len(self.questions, len(self.given_answers)))
         self.questions.insert(index, question)
         self.given_answers.insert(index, answers)
-        self.score += question.check_answer(answers)
+        self.actual_score += question.check_answer(answers)
+        self.actual_max_points += question.number_of_points
 
+    
     def get_total_score(self):
-        score = 0
+        actual_score = 0
         for question, given_answer in zip(self.questions, self.given_answers):
-            score += question.check_answer(given_answer)
+            actual_score += question.check_answer(given_answer)
 
-        self.score = score
-        return score
+        self.actual_score = actual_score
+        return actual_score
     
     def get_max_points(self):
         points = 0
@@ -35,13 +38,14 @@ class Attempt:
     def add_question_list(self, questions):
         self.questions = questions
         self.given_answers = []
-        self.score = 0
+        self.actual_score = 0
         self.index = 0
 
     def add_answer(self, given_answer):
         print(len(self.questions))
         if len(self.questions) > len(self.given_answers):
-            self.score += self.questions[len(self.given_answers)].check_answer(given_answer)
+            self.actual_score += self.questions[len(self.given_answers)].check_answer(given_answer)
+            self.actual_max_points += self.questions[len(self.given_answers)].number_of_points
             self.given_answers.append(given_answer)
 
         else:

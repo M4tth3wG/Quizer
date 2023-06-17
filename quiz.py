@@ -92,16 +92,25 @@ class Quiz:
         return len(self.last_attempt.questions) == 0
     
     def get_score(self):
-        return self.last_attempt.get_total_score()
+        return self.last_attempt.actual_score
     
-    def get_max_points(self):
+    def get_actual_max_points(self):
+        return self.last_attempt.actual_max_points
+    
+    def get_actual_index(self):
+        return self.last_attempt.index
+    
+    def get_number_of_question(self):
+        return len(self.last_attempt.questions)
+    
+    def get_total_max_points(self):
         return self.last_attempt.get_max_points()
     
     def save_scores(self):
         if not os.path.join(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE):
             create_empty_db(RESULT_DATABASE_FOLDER, RESULT_DATABASE_FILE)
 
-        load_score_to_base(self.name, self.get_score(), self.get_max_points(), f'{RESULT_DATABASE_FOLDER}{os.sep}{RESULT_DATABASE_FILE}')
+        load_score_to_base(self.name, self.get_score(), self.get_total_max_points(), f'{RESULT_DATABASE_FOLDER}{os.sep}{RESULT_DATABASE_FILE}')
 
     def read_scores(self):
         scored_points, max_points, dates = [],[],[]
