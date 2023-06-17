@@ -19,7 +19,7 @@ class QuizWindow(QMainWindow):
         self.setFixedWidth(800)
         self.setFixedHeight(600)
         self.quiz_window_views.setCurrentIndex(0)
-        self.quiz_name_label.setText(quiz.name)
+        self.quiz_name_label.setText(quiz._name)
         self.question_repetition_line_edit.setDisplayText('1')
 
         self.start_quiz_btn.clicked.connect(self.start_quiz)

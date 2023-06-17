@@ -9,7 +9,7 @@ from datetime import datetime, date
 
 
 ALL_QUIZZES_FILE_PATH = r'quizzes\all_quizes.txt'
-ALL_QUIZZES_DATABASE = r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_results\scores_database.db'
+ALL_QUIZZES_DATABASE = r'.\scores_database.db'
 
 def create_empty_db(path, db_name):
 

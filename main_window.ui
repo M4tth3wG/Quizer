@@ -85,13 +85,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="browse_saved_attempts_btn">
-      <property name="text">
-       <string>Przeglądaj zapisane podejścia</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QPushButton" name="quit_btn">
       <property name="text">
        <string>Wyjdź</string>
