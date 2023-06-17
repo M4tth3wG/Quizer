@@ -94,6 +94,9 @@ def main():
     # quiz2.read_scores()
 
 
+    print(x3.answers.values())
+
+
 
 
 
