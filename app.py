@@ -29,7 +29,7 @@ class MenuWindow(QMainWindow):
             self.quiz_window.show()
             self.close()
         except:
-            self.show_error_message('Incorrect quiz file!')
+            self.show_error_message('Nieprawidłowy plik quizu!')
 
     
     def show_error_message(self, message):

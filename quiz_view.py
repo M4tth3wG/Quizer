@@ -19,6 +19,8 @@ class QuizWindow(QMainWindow):
         self.setFixedWidth(800)
         self.setFixedHeight(600)
         self.quiz_window_views.setCurrentIndex(0)
+        self.quiz_name_label.setText(quiz.name)
+        self.question_repetition_line_edit.setDisplayText('1')
 
         self.start_quiz_btn.clicked.connect(self.start_quiz)
         self.quit_btn.clicked.connect(self.close)
@@ -30,6 +32,13 @@ class QuizWindow(QMainWindow):
         self.quiz_repeat_btn.clicked.connect(self.repeat_quiz)
 
     def start_quiz(self):
+        try:
+            self.quiz.number_of_question_repetition = int(self.question_repetition_line_edit.text())
+        except:
+            self.main_window.show_error_message('Nieprawidłowa liczba powtórzeń pytania!')
+
+        self.quiz.shuffle = self.question_shuffle_check_box.isChecked()
+        
         self.quiz.prepare_quiz()
         self.quiz_window_views.setCurrentIndex(1)
         self.load_question()
@@ -44,6 +53,7 @@ class QuizWindow(QMainWindow):
             self.load_answers()
         except exceptions.EndQuestionException:
             self.quiz_window_views.setCurrentIndex(2)
+            self.display_final_score()
 
     def update_quiz_progress_label(self):
         self.quiz_progress_label.setText(f'{self.quiz.get_actual_index() + 1}/{self.quiz.get_number_of_question()}')
@@ -144,9 +154,12 @@ class QuizWindow(QMainWindow):
         for btn in self.answer_btns:
             self.answer_layout.removeWidget(btn)
             btn.deleteLater()
-            
+
         self.answer_btns.clear()
 
     def repeat_quiz(self):
         self.quiz_window_views.setCurrentIndex(0)
         self.quiz.reset_quiz()
+
+    def display_final_score(self):
+        self.final_score_label.setText(f'{self.quiz.get_score()}/{self.quiz.get_total_max_points()}')
