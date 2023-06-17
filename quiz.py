@@ -36,11 +36,11 @@ class Quiz:
         self._shuffle_answers = shuffle_answers
 
     @staticmethod
-    def create_new_quiz(name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
+    def create_new_quiz(name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False, shuffle_answers=False):
         if check_quiz_exists(name):
             raise DuplicatedQuizNameException(f'Quiz with name: {name} has already existed!!!')
         
-        return Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle)
+        return Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle, shuffle_answers)
 
 
     def clear_question_bank(self):
@@ -51,6 +51,7 @@ class Quiz:
         self._last_attempt = Attempt()
         self._is_ready = False
         self._is_blocked = True
+        
 
 
     def clear_questions(self):
@@ -188,11 +189,12 @@ class Quiz:
             questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
             mode = data['mode']
             shuffle = data['shuffle']
+            shuffle_answers = data['shuffle_answers']
             isReady = data['isReady'] 
             isBlocked = data ['isBlocked']
             number_of_question_repetition = data['number_of_question_repetition']
 
-            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
+            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition, shuffle_answers)
             return_quiz._is_ready = isReady
             return_quiz._is_blocked = isBlocked
 
@@ -213,6 +215,7 @@ class Quiz:
             'question_bank': [question.__dict__() for question in self._questions_bank],
             'mode': self._mode,
             'shuffle': self._shuffle,
+            'shuffle_answers': self._shuffle_answers,
             'isReady': False, 
             'isBlocked': True,
             'number_of_question_repetition': self._number_of_question_repetition
