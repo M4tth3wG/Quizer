@@ -19,11 +19,24 @@ class Attempt:
             'actual_max_points': self._actual_max_points,
             'index': self._index
         }
+    
+    @property
+    def actual_score(self):
+        return self._actual_score
+
+    @property
+    def actual_max_points(self):
+        return self._actual_max_points
+    
+    @property
+    def index(self):
+        return self._index
+
 
     def add_question_attempt(self, question, answers):
         if len(question.get_correct_answers()) < answers:
             raise ValueError('There are more answers than there are in the question!!!')
-        index = min(len(self.questions, len(self.given_answers)))
+        index = min(len(self._questions, len(self._given_answers)))
         self._questions.insert(index, question)
         self._given_answers.insert(index, answers)
         self._actual_score += question.check_answer(answers)
@@ -60,13 +73,13 @@ class Attempt:
             raise ValueError('There are more answers than there are in the question!!!')
         
     def pop_next_question(self):
-        if self.is_next_question:
+        if self.is_next_question():
             self._index += 1
             return self._questions[self._index - 1]
         raise EndQuestionException("There is no more questions!!!")
     
     def peek_next_question(self):
-        if self.is_next_question:
+        if self.is_next_question():
             return self._questions[self._index]
         raise EndQuestionException("There is no more questions!!!")
         

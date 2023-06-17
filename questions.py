@@ -13,6 +13,8 @@ MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 class Question(ABC):
 
     def __init__(self, content, answers : list, number_of_points=1.0):
+        if number_of_points <= 0:
+            raise ValueError("Number of points must be positive number!!!")
         self._content = content
         self._number_of_points = number_of_points
         self._answers : dict = self.convert_answers_to_show_form(answers)
@@ -23,6 +25,32 @@ class Question(ABC):
         for answer in self._answers.values():
             result += f'\t {answer}\n'
         return result[:-1]
+    
+    @property
+    def number_of_points(self):
+        return self._number_of_points
+
+    @number_of_points.setter
+    def number_of_points(self, new_number):
+        if new_number <= 0:
+            raise ValueError("Number of points must be positive number!!!")
+        self._number_of_points = new_number
+
+    @property
+    def content(self):
+        return self._content
+    
+    @content.setter
+    def content(self, new_content):
+        self._content = new_content
+
+    @property
+    def answers(self):
+        return self._answers
+    
+    @answers.setter
+    def answers(self, new_answers):
+        self._answers = new_answers
 
 
     @abstractmethod
@@ -112,9 +140,9 @@ class SingleChoiceQuestion(Question):
         return {
             'type': 'SQ',
             'content': self._content,
-            'number_of_points': self._number_of_points,
             'answers': self._answers,
-            'correct_answers': self._correct_answer
+            'correct_answers': self._correct_answer,
+            'number_of_points': self._number_of_points
         }
 
 
@@ -186,12 +214,11 @@ class SingleChoiceQuestion(Question):
     def get_correct_answers(self):
         return [self._correct_answer]
     
-
     
     @staticmethod
     def read_from_dict(q_dict):
-        result = SingleChoiceQuestion(q_dict['content'], [], q_dict['correct_answers'], q_dict['number_of_points'])
-        result.answers = q_dict['answers']
+        result = SingleChoiceQuestion(q_dict['content'], q_dict['answers'], q_dict['correct_answers'], q_dict['number_of_points'])
+        # result.answers = q_dict['answers']
         return result
     
     def to_json(self):

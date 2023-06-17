@@ -33,16 +33,16 @@ x2 = MultipleChoiceQuestion(
 
 
 
-# quiz = Quiz.create_new_quiz("test23", [x1,x2])
+quiz = Quiz("test23", [x1,x2], shuffle=True)
 
-# i = 1
-# for q in quiz.questions_bank:
-#     with open(f'test_json{i}.json', 'w+', encoding='utf-8') as file:
-#         file.write(q.to_json() + '\n')
-#     i += 1
+i = 1
+for q in quiz.questions_bank:
+    with open(f'test_json{i}.json', 'w+', encoding='utf-8') as file:
+        file.write(q.to_json() + '\n')
+    i += 1
 
-# with open('quiz_json.json', 'w+', encoding='utf-8') as file:
-#     file.write(quiz.to_json())
+with open('quiz_json.json', 'w+', encoding='utf-8') as file:
+    file.write(quiz.to_json())
 
 
 load_quiz = Quiz.load_from_json(r'D:\test_quiz.json')

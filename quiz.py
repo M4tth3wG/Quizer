@@ -3,11 +3,10 @@ from questions import Question
 from attempt import Attempt
 from itertools import repeat
 from exceptions import NotPreparedQuizException, BlockedQuizException, QuizException, DuplicatedQuizNameException
-from database_support import load_score_to_base, create_empty_db, find_all_scores_for_quiz, check_quiz_exists, check_quiz
+from database_support import load_score_to_base, create_empty_db, find_all_scores_for_quiz, check_quiz_exists
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
-from datetime import datetime
 from dataclasses import dataclass
 
 
@@ -17,7 +16,7 @@ GENTLE_MODE = 1
 RELENTLESS_MODE = 0
 
 RESULT_DATABASE_FILE = r'scores_database.db'
-RESULT_DATABASE_FOLDER = r'./quiz_results'
+RESULT_DATABASE_FOLDER = rf'.{os.sep}quiz_results'
 
 @dataclass
 class Quiz:
@@ -63,7 +62,7 @@ class Quiz:
     def prepare_quiz(self):
         self._last_attempt.add_question_list([question for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
         if self.shuffle:
-            random.shuffle(self._last_attempt._questions)
+            random.shuffle(self._last_attempt.__questions)
         self._is_ready, self._is_blocked = True, False
 
 
@@ -91,8 +90,15 @@ class Quiz:
         
     
     def check_emptiness_question_list(self):
-        return len(self._last_attempt._questions) == 0
-
+        return len(self._last_attempt.questions) == 0
+    
+    @property
+    def is_ready(self):
+        return self._is_ready
+    
+    @property
+    def is_blocked(self):
+        return self._is_blocked
     
     @property
     def number_of_question_repetition(self):
@@ -173,8 +179,8 @@ class Quiz:
             number_of_question_repetition = data['number_of_question_repetition']
 
             return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
-            return_quiz.is_ready = isReady
-            return_quiz.is_blocked = isBlocked
+            return_quiz._is_ready = isReady
+            return_quiz._is_blocked = isBlocked
 
             return return_quiz
         
