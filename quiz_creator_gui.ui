@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Quiz creator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -246,17 +246,28 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="confirm_btn">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+           <widget class="QPushButton" name="previous_question_btn">
             <property name="text">
-             <string>Zakończ</string>
+             <string>Poprzednie pytanie</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="next_question_btn">
+            <property name="text">
+             <string>Następne pytanie</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="add_question_button">
+            <property name="text">
+             <string>Dodaj pytanie</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="save_quiz_btn">
             <property name="enabled">
              <bool>false</bool>
             </property>
