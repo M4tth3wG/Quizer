@@ -47,4 +47,4 @@ with open('quiz_json.json', 'w+', encoding='utf-8') as file:
 
 load_quiz = Quiz.load_from_json('quiz_json.json')
 
-print(load_quiz.questions_bank[0])
+print(load_quiz.questions_bank[1])
