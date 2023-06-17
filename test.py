@@ -63,10 +63,12 @@ def main():
     # x3.show_answers()
     # x4.show_answers()
 
-    quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
+    # quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
+    quiz = Quiz.load_from_json(r'D:\test_quiz.json')
     quiz.prepare_quiz()
 
-    correct_answers = [[2], [1,2,3], [2], [3,4]]
+    # correct_answers = [[2], [1,2,3], [2], [3,4]]
+    correct_answers = [[2], [3,4]]
 
     print(SPLIT_LINE)
     for answer in correct_answers:

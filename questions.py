@@ -217,7 +217,7 @@ class SingleChoiceQuestion(Question):
     
     @staticmethod
     def read_from_dict(q_dict):
-        result = SingleChoiceQuestion(q_dict['content'], q_dict['answers'], q_dict['correct_answers'], q_dict['number_of_points'])
+        result = SingleChoiceQuestion(q_dict['content'], q_dict['answers'].values(), q_dict['correct_answers'], q_dict['number_of_points'])
         # result.answers = q_dict['answers']
         return result
     
