@@ -113,13 +113,13 @@ class Quiz:
         return copy.copy(self._questions_bank)
     
     def get_score(self):
-        return self._last_attempt.actual_score
+        return self._last_attempt._actual_score
     
     def get_actual_max_points(self):
-        return self._last_attempt.actual_max_points
+        return self._last_attempt._actual_max_points
     
     def get_actual_index(self):
-        return self._last_attempt.index
+        return self._last_attempt._index
     
     def get_number_of_question(self):
         return len(self._last_attempt.get_length_of_questions())
