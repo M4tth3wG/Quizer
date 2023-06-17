@@ -3,13 +3,15 @@ from questions import Question
 from attempt import Attempt
 from itertools import repeat
 from exceptions import NotPreparedQuizException, BlockedQuizException, QuizException, DuplicatedQuizNameException
-from database_support import load_score_to_base, create_empty_db, find_all_scores_for_quiz, check_quiz_exists
+from database_support import load_score_to_base, create_empty_db, find_all_scores_for_quiz, check_quiz_exists, check_quiz
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 from datetime import datetime
 from dataclasses import dataclass
 
+
+DEFAULT_PATH_TO_SAVE_ATTEMPT= r'.\default_attempt.json'
 
 GENTLE_MODE = 1
 RELENTLESS_MODE = 0
@@ -23,9 +25,6 @@ class Quiz:
     def __init__(self, name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
         if number_of_question_repetition <= 0:
             raise ValueError("Number of question repetition must be positive number!!!")
-        
-        if check_quiz_exists(name):
-            raise DuplicatedQuizNameException(f'Quiz with name: {name} has already existed!!!')
 
         self._name = name
         self._questions_bank = questions_bank
@@ -35,6 +34,14 @@ class Quiz:
         self._is_ready = False
         self._is_blocked = True
         self._number_of_question_repetition = number_of_question_repetition
+
+    @staticmethod
+    def create_new_quiz(name, questions_bank: list[Question], number_of_question_repetition = 1, mode = GENTLE_MODE, shuffle=False):
+        if check_quiz_exists(name):
+            raise DuplicatedQuizNameException(f'Quiz with name: {name} has already existed!!!')
+        
+        return Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle)
+
 
     def clear_question_bank(self):
         self._questions_bank = []
@@ -85,10 +92,7 @@ class Quiz:
     
     def check_emptiness_question_list(self):
         return len(self._last_attempt.questions) == 0
-    
-    @property
-    def name(self):
-        raise
+
     
     @property
     def number_of_question_repetition(self):
@@ -141,7 +145,6 @@ class Quiz:
             max_points.append(score.max_points)
             dates.append(score.date)
 
-        # Tworzenie wykresu
         plt.plot(dates, scored_points, marker='o', linestyle='-', label='Punkty zdobyte')
         plt.plot(dates, max_points, marker='o', linestyle='-', label='Maksymalne punkty')
         plt.xlabel('Data')
@@ -149,12 +152,10 @@ class Quiz:
         plt.title('Postęp w nauce')
         plt.legend()
 
-        # Konfiguracja osi czasu
         date_formatter = DateFormatter('%Y-%m-%d')
         plt.gca().xaxis.set_major_formatter(date_formatter)
         plt.gca().xaxis.set_major_locator(plt.MaxNLocator(5))
 
-        # Wyświetlanie wykresu
         plt.tight_layout()
         plt.show()
 
@@ -171,23 +172,17 @@ class Quiz:
             isBlocked = data ['isBlocked']
             number_of_question_repetition = data['number_of_question_repetition']
 
-            if number_of_question_repetition <= 0:
-                raise ValueError("Number of Question repetition must be positive number!!!")
-
-            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
+            return_quiz = Quiz.create_new_quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
             return_quiz.is_ready = isReady
             return_quiz.is_blocked = isBlocked
 
             return return_quiz
         
-    def save_attempt_to_json(self):
-        if self._last_attempt != None:
-            self._last_attempt.to_json()
-            return True
-        return False
+
         
-    def load_attempt_from_json(self, path):
-        self.save_attempt_to_json()
+
+    def load_attempt_from_json(self, path, path_to_save_current_attempt=DEFAULT_PATH_TO_SAVE_ATTEMPT):
+        self.save_attempt_to_json(path_to_save_current_attempt)
         self._last_attempt = Attempt.load_from_json(path)
 
 

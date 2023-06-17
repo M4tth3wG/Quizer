@@ -110,6 +110,16 @@ class Attempt:
             return_attempt._index = index
 
             return return_attempt
+        
+
+    def save_attempt_to_json(self, path):
+        try:
+            with open(path, 'w+', encoding='utf-8') as file:
+                file.write(self.to_json() + '\n')
+            return True
+        except FileNotFoundError:
+            sys.err.write(f'Attempt not written to file: {path}')
+            return False
 
         
 

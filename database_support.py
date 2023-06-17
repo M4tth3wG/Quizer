@@ -21,16 +21,17 @@ def check_quiz_exists(input_quiz_name):
     Base.metadata.create_all(engine)
 
     with Session(engine, autoflush=False) as session:
-        quiz = session.query(QuizDB).filter_by(quiz_name=input_quiz_name).first()
-        return quiz != None
+        return not check_quiz(input_quiz_name, session)[1]
 
 
-def check_quiz(input_quiz_name, session) -> QuizDB:
+def check_quiz(input_quiz_name, session):
     quiz = session.query(QuizDB).filter_by(quiz_name=input_quiz_name).first()
+    is_new_Quiz = False
     if not quiz:
         quiz = QuizDB(quiz_name=input_quiz_name)
         session.add(quiz)
         session.commit()
+        is_new_Quiz = True
 
     # try:
     #     with open(ALL_QUIZZES_FILE_PATH, "r+", encoding='utf-8') as file:
@@ -41,7 +42,8 @@ def check_quiz(input_quiz_name, session) -> QuizDB:
     #                 file.write(input_quiz_name + '\n')
     # except FileNotFoundError:
     #     sys.stderr.write(f'File not found (Path: {ALL_QUIZZES_FILE_PATH})\n')
-    return quiz
+    print(is_new_Quiz)
+    return quiz, is_new_Quiz
 
 
 
@@ -54,7 +56,7 @@ def load_score_to_base(quiz_name, input_scored_points, input_max_points, db_path
     with Session(engine, autoflush=False) as session:
                   
         try:
-            quiz = check_quiz(quiz_name, session)
+            quiz, _ = check_quiz(quiz_name, session)
             new_score = Score(
                                 scored_points=input_scored_points,
                                 max_points=input_max_points,
