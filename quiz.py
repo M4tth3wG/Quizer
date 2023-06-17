@@ -91,7 +91,7 @@ class Quiz:
         
     
     def check_emptiness_question_list(self):
-        return len(self._last_attempt.questions) == 0
+        return len(self._last_attempt._questions) == 0
 
     
     @property

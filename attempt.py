@@ -53,7 +53,7 @@ class Attempt:
     def add_answer(self, given_answer):
         if len(self._questions) > len(self._given_answers):
             self._actual_score += self._questions[len(self._given_answers)].check_answer(given_answer)
-            self._actual_max_points += self._questions[len(self._given_answers)].number_of_points
+            self._actual_max_points += self._questions[len(self._given_answers)]._number_of_points
             self._given_answers.append(given_answer)
 
         else:

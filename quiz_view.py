@@ -90,7 +90,7 @@ class QuizWindow(QMainWindow):
             self.answer_btns.append(answer_btn)
 
     def load_multiple_choice_answers(self):
-        answers_dict = self.current_question.answers
+        answers_dict = self.current_question._answers
 
         for answer in answers_dict.values():
             answer_btn = QPushButton()
