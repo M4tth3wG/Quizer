@@ -27,6 +27,7 @@ class QuizWindow(QMainWindow):
         self.quiz_back_to_menu_btn.clicked.connect(self.close)
         self.confirm_btn.clicked.connect(self.confirm_answer)
         self.next_question_btn.clicked.connect(self.load_question)
+        self.quiz_repeat_btn.clicked.connect(self.repeat_quiz)
 
     def start_quiz(self):
         self.quiz.prepare_quiz()
@@ -38,15 +39,17 @@ class QuizWindow(QMainWindow):
             self.next_question_btn.setEnabled(False)
             self.current_question = self.quiz.get_question()
             self.question_text_edit.setPlainText(self.current_question.content)
-            self.update_progress_bar()
+            self.update_quiz_progress_label()
             self.update_question_type_label()
             self.load_answers()
         except exceptions.EndQuestionException:
             self.quiz_window_views.setCurrentIndex(2)
 
-    def update_progress_bar(self):
-        #self.progress_text_edit.setText(f'{}/{}')
-        pass
+    def update_quiz_progress_label(self):
+        self.quiz_progress_label.setText(f'{self.quiz.get_actual_index() + 1}/{self.quiz.get_number_of_question()}')
+
+    def update_current_score_label(self):
+        self.current_score_label.setText(f'{self.quiz.get_score()}/{self.quiz.get_actual_max_points()}')
 
     def update_question_type_label(self):
         if isinstance(self.current_question, questions.SingleChoiceQuestion):
@@ -114,6 +117,7 @@ class QuizWindow(QMainWindow):
     def confirm_answer(self):
         self.quiz.check_answer(self.get_answers_from_buttons())
         self.display_correct_answers()
+        self.update_current_score_label()
         self.confirm_btn.setEnabled(False)
 
     def display_correct_answers(self):
@@ -140,5 +144,9 @@ class QuizWindow(QMainWindow):
         for btn in self.answer_btns:
             self.answer_layout.removeWidget(btn)
             btn.deleteLater()
-        
+            
         self.answer_btns.clear()
+
+    def repeat_quiz(self):
+        self.quiz_window_views.setCurrentIndex(0)
+        self.quiz.reset_quiz()
