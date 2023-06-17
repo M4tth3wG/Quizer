@@ -41,7 +41,7 @@ class Attempt:
     def get_max_points(self):
         points = 0
         for question in self._questions:
-            points += question.number_of_points
+            points += question._number_of_points
         return points
     
     def add_question_list(self, questions):

@@ -51,7 +51,8 @@ class QuizWindow(QMainWindow):
             self.update_quiz_progress_label()
             self.update_question_type_label()
             self.load_answers()
-        except exceptions.EndQuestionException:
+        #except exceptions.EndQuestionException:
+        except:
             self.quiz_window_views.setCurrentIndex(2)
             self.display_final_score()
 
