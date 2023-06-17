@@ -20,7 +20,7 @@ class QuizWindow(QMainWindow):
         self.setFixedHeight(600)
         self.quiz_window_views.setCurrentIndex(0)
         self.quiz_name_label.setText(quiz._name)
-        self.question_repetition_line_edit.setDisplayText('1')
+        self.question_repetition_line_edit.setText('1')
 
         self.start_quiz_btn.clicked.connect(self.start_quiz)
         self.quit_btn.clicked.connect(self.close)
@@ -47,7 +47,7 @@ class QuizWindow(QMainWindow):
         try:
             self.next_question_btn.setEnabled(False)
             self.current_question = self.quiz.get_question()
-            self.question_text_edit.setPlainText(self.current_question.content)
+            self.question_text_edit.setPlainText(self.current_question._content)
             self.update_quiz_progress_label()
             self.update_question_type_label()
             self.load_answers()

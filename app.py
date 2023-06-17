@@ -22,14 +22,14 @@ class MenuWindow(QMainWindow):
         self.load_quiz_btn.clicked.connect(self.load_quiz)
 
     def load_quiz(self):
-        try:
+        #try:
             file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
             loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
             self.close()
-        except:
-            self.show_error_message('Nieprawidłowy plik quizu!')
+        #except:
+            #self.show_error_message('Nieprawidłowy plik quizu!')
 
     
     def show_error_message(self, message):

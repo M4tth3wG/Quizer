@@ -63,7 +63,7 @@ class Quiz:
     def prepare_quiz(self):
         self._last_attempt.add_question_list([question for question in self._questions_bank for _ in repeat(None, self._number_of_question_repetition)])
         if self.shuffle:
-            random.shuffle(self._last_attempt.questions)
+            random.shuffle(self._last_attempt._questions)
         self._is_ready, self._is_blocked = True, False
 
 
@@ -172,7 +172,7 @@ class Quiz:
             isBlocked = data ['isBlocked']
             number_of_question_repetition = data['number_of_question_repetition']
 
-            return_quiz = Quiz.create_new_quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
+            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition)
             return_quiz.is_ready = isReady
             return_quiz.is_blocked = isBlocked
 
