@@ -9,12 +9,12 @@ import quiz
 from quiz_view import QuizWindow
 
 class MenuWindow(QMainWindow):
-    quiz_window = None
     
     def __init__(self, ui_file):
         super(MenuWindow, self).__init__()
         uic.loadUi(ui_file, self)
 
+        self.quiz_window = None
         self.setFixedWidth(500)
         self.setFixedHeight(250)
 

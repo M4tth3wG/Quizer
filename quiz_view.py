@@ -7,13 +7,13 @@ from functools import partial
 import exceptions
 
 class QuizWindow(QMainWindow):
-    current_question = None
-    answer_btns = []
     
     def __init__(self, quiz: Quiz, main_window):
         super(QuizWindow, self).__init__()
         uic.loadUi(Path('quiz_gui.ui'), self)
 
+        self.current_question = None
+        self.answer_btns = []
         self.quiz = quiz
         self.main_window = main_window
         self.setFixedWidth(800)
@@ -25,8 +25,8 @@ class QuizWindow(QMainWindow):
         self.start_quiz_btn.clicked.connect(self.start_quiz)
         self.quit_btn.clicked.connect(self.close)
         self.quit_btn.clicked.connect(self.main_window.show)
-        self.quiz_back_to_menu_btn.clicked.connect(self.main_window.show)
         self.quiz_back_to_menu_btn.clicked.connect(self.close)
+        self.quiz_back_to_menu_btn.clicked.connect(self.main_window.show)
         self.confirm_btn.clicked.connect(self.confirm_answer)
         self.next_question_btn.clicked.connect(self.load_question)
         self.quiz_repeat_btn.clicked.connect(self.repeat_quiz)
