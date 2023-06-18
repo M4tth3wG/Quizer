@@ -110,7 +110,7 @@ class QuizCreatorWindow(QMainWindow):
         for correct_answer in question.get_correct_answers():
             self.answer_layouts_list[correct_answer].itemAt(0).widget().setChecked(True)
 
-        # lock question
+        self.lock_question()
 
 
     def load_previous_question(self):
@@ -129,6 +129,9 @@ class QuizCreatorWindow(QMainWindow):
         pass
 
     def save_quiz(self):
+        pass
+
+    def lock_question(self):
         pass
 
     
