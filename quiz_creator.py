@@ -168,8 +168,9 @@ class QuizCreatorWindow(QMainWindow):
             self.load_new_question_view()
 
     def load_new_question_view(self):
-        self.clear_loaded_question_view()
+        print('debug')
         self.unlock_question()
+        self.clear_loaded_question_view()
         self.current_question_exists = False
         self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/{self.quiz_builder.get_length() + 1}')
 
