@@ -33,7 +33,7 @@ class QuizBuilder:
     def add_question(self, question):
         if not self.is_empty():
             self._actual_index += 1
-        self._question_list.insert(self._current_index, question)
+        self._question_list.insert(self._actual_index, question)
 
 
     def has_previous(self):
