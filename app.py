@@ -8,6 +8,7 @@ import os
 import quiz
 from quiz_view import QuizWindow
 from quiz_creator import QuizCreatorWindow
+from functools import partial
 
 class MenuWindow(QMainWindow):
     
@@ -21,7 +22,8 @@ class MenuWindow(QMainWindow):
 
         self.quit_btn.clicked.connect(exit)
         self.load_quiz_btn.clicked.connect(self.load_quiz)
-        self.create_new_quiz_btn.clicked.connect(self.open_quiz_creator)
+        self.create_new_quiz_btn.clicked.connect(partial(self.open_quiz_creator, None))
+        self.edit_quiz_btn.clicked.connect(self.edit_quiz)
 
     def load_quiz(self):
         try:
@@ -33,10 +35,17 @@ class MenuWindow(QMainWindow):
         except:
             self.show_error_message('Nieprawidłowy plik quizu!')
 
-    def open_quiz_creator(self):
-        self.quiz_creator_window = QuizCreatorWindow(self)
+    def open_quiz_creator(self, quiz_path = None):
+        self.quiz_creator_window = QuizCreatorWindow(self, quiz_path)
         self.quiz_creator_window.show()
         self.close()
+
+    def edit_quiz(self):
+        try:
+            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
+            self.open_quiz_creator(file_path)
+        except:
+            self.show_error_message('Nieprawidłowy plik quizu!')
 
     
     def show_error_message(self, message):
