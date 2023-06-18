@@ -20,9 +20,6 @@ class QuizCreatorWindow(QMainWindow):
         self.answer_layouts_list = []
         self.main_window = main_window
 
-        if quiz_path != None:
-            self.quiz_builder.load_quiz_from_json(quiz_path)
-
         self.quit_btn.clicked.connect(self.close)
         self.quit_btn.clicked.connect(self.main_window.show)
         self.add_answer_btn.clicked.connect(self.create_answer_input)
@@ -35,7 +32,14 @@ class QuizCreatorWindow(QMainWindow):
         self.save_quiz_btn.clicked.connect(self.save_quiz)
         self.delete_question_btn.clicked.connect(self.delete_current_question)
 
-    # works
+        if quiz_path != None:
+            self.quiz_builder.load_quiz_from_json(quiz_path)
+            self.current_question_exists = True
+        else:
+            self.current_question_exists = False
+
+        self.load_current_question()
+
     def create_answer_input(self):
         answer_line_edit = QLineEdit()
         delete_answer_btn = QPushButton()
@@ -61,7 +65,6 @@ class QuizCreatorWindow(QMainWindow):
 
         return answer_horizontal_layout
 
-    #works
     def delete_answer(self, answer_layout):
         self.answer_vertical_layout.removeItem(answer_layout)
         self.answer_layouts_list.remove(answer_layout)
@@ -74,36 +77,30 @@ class QuizCreatorWindow(QMainWindow):
         answer_layout.deleteLater()
         self.relock_correct_answers_check_boxes()
 
-
-    # bug
     def lock_all_answers(self):
         for layout in self.answer_layouts_list:
             for i in range(layout.count()):
-                layout.takeAt(i).widget().setEnabled(False)
+                layout.itemAt(i).widget().setEnabled(False)
 
-    #bug
     def unlock_all_answers(self):
         for layout in self.answer_layouts_list:
             for i in range(layout.count()):
-                layout.takeAt(i).widget().setEnabled(True)
+                layout.itemAt(i).widget().setEnabled(True)
 
     def clear_all_answers(self):
         for layout in self.answer_layouts_list:
             self.delete_answer(layout)
 
-    #works
     def update_correct_answers_check_boxes(self):
         if self.multiple_answer_question_check_box.isChecked():
             self.unlock_correct_answers_check_boxes()
         else:
             self.clear_correct_answers_check_boxes()
 
-    #works
     def clear_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setChecked(False)
 
-    #works
     def relock_correct_answers_check_boxes(self):
         buttons = [layout.itemAt(0).widget() for layout in self.answer_layouts_list]
         
@@ -114,28 +111,25 @@ class QuizCreatorWindow(QMainWindow):
         else:
             self.lock_correct_answers_check_boxes()
 
-    #works
     def lock_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
             button =  layout.itemAt(0).widget()
             if not button.isChecked():
                 button.setEnabled(False)
 
-    #works
     def unlock_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setEnabled(True)
 
-    #?
     def update_browsing_buttons(self):
         self.next_question_btn.setEnabled(self.quiz_builder.has_next())
         self.previous_question_btn.setEnabled(self.quiz_builder.has_previous())
 
-
     def load_question(self, question):
         self.clear_loaded_question_view()
+        self.current_question_exists = True
         
-        self.question_text_edit.setText(question.content)
+        self.question_text_edit.setPlainText(question.content)
         self.multiple_answer_question_check_box.setChecked(isinstance(question, questions.MultipleChoiceQuestion))
         self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/implement it')
 
@@ -148,26 +142,36 @@ class QuizCreatorWindow(QMainWindow):
 
         self.lock_question()
 
-    #?
+    def load_current_question(self):
+        if self.quiz_builder.current_question != None:
+            self.load_question(self.quiz_builder.current_question)
+        else:
+            self.load_new_question_view()
+
     def load_previous_question(self):
         self.load_question(self.quiz_builder.prev())
 
-    #?
     def load_next_question(self):
         self.load_question(self.quiz_builder.next())
 
-    #bug
     def edit_current_question(self):
         self.unlock_question()
 
-    #?
     def delete_current_question(self):
-        self.quiz_builder.drop_current_question()
+        
+        if self.current_question_exists:
+            self.quiz_builder.drop_current_question()
 
         if self.quiz_builder.current_question != None:
             self.load_question(self.quiz_builder.current_question)
+        else:
+            self.load_new_question_view()
 
-    #?
+    def load_new_question_view(self):
+        self.clear_loaded_question_view()
+        #self.unlock_question()
+        self.current_question_exists = False
+
     def save_current_question(self):
         content = self.question_text_edit.toPlainText()
         answers = [layout.itemAt(1).widget().text() for layout in self.answer_layouts_list]
@@ -182,17 +186,14 @@ class QuizCreatorWindow(QMainWindow):
             self.main_window.show_error_message('Niepoprawne parametry pytania!')
             return
         
-        try:
+        if self.current_question_exists:
             self.quiz_builder.drop_current_question()
-        except IndexError:
-            pass
 
         self.quiz_builder.add_question(question)
         self.lock_question()
 
     def add_new_question(self):
-        self.clear_loaded_question_view()
-        self.unlock_question()
+        self.load_new_question_view()
 
     def save_quiz(self):
         default_directory = str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes'))
