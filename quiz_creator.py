@@ -13,6 +13,7 @@ class QuizCreatorWindow(QMainWindow):
         super(QuizCreatorWindow, self).__init__()
         uic.loadUi(Path('quiz_creator_gui.ui'), self)
 
+        #self.quiz_builder = QuizBuilder()
         self.answer_layouts_list = []
         self.main_window = main_window
         self.quit_btn.clicked.connect(self.close)
@@ -37,11 +38,11 @@ class QuizCreatorWindow(QMainWindow):
         answer_horizontal_layout.addWidget(delete_answer_btn)
 
         delete_answer_btn.clicked.connect(partial(self.delete_answer, answer_horizontal_layout))
-        correct_answer_check_box.stateChanged.connect(self.update_buttons)
+        correct_answer_check_box.stateChanged.connect(self.relock_correct_aswers_check_boxes)
 
         self.answer_layouts_list.append(answer_horizontal_layout)
         self.answer_vertical_layout.addLayout(answer_horizontal_layout)
-        self.update_buttons()
+        self.relock_correct_aswers_check_boxes()
 
     def delete_answer(self, answer_layout):
         self.answer_vertical_layout.removeItem(answer_layout)
@@ -53,7 +54,7 @@ class QuizCreatorWindow(QMainWindow):
                 widget.deleteLater()
 
         answer_layout.deleteLater()
-        self.update_buttons()
+        self.relock_correct_aswers_check_boxes()
 
     def update_correct_answers_check_boxes(self):
         if self.multiple_answer_question_check_box.isChecked():
@@ -65,7 +66,7 @@ class QuizCreatorWindow(QMainWindow):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setChecked(False)
 
-    def update_buttons(self):
+    def relock_correct_aswers_check_boxes(self):
         buttons = [layout.itemAt(0).widget() for layout in self.answer_layouts_list]
         
         if self.multiple_answer_question_check_box.isChecked():
@@ -74,12 +75,6 @@ class QuizCreatorWindow(QMainWindow):
             self.unlock_correct_answers_check_boxes()
         else:
             self.lock_correct_answers_check_boxes()
-
-    def update_buttons_after_deletion(self):
-        buttons = [layout.itemAt(0).widget() for layout in self.answer_layouts_list]
-        
-        if not any(button.isChecked() for button in buttons):
-            self.unlock_correct_answers_check_boxes()
 
     def lock_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
