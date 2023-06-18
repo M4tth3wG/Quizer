@@ -286,7 +286,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignVCenter">
-           <widget class="QPushButton" name="add_question_button">
+           <widget class="QPushButton" name="add_question_btn">
             <property name="enabled">
              <bool>false</bool>
             </property>
