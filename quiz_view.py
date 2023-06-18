@@ -165,6 +165,7 @@ class QuizWindow(QMainWindow):
 
     def repeat_quiz(self):
         self.quiz_window_views.setCurrentIndex(0)
+        self.current_score_label.setText('0')
         self.quiz.reset_quiz()
 
     def display_final_score(self):
