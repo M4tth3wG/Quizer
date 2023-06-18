@@ -58,6 +58,9 @@ class QuizBuilder:
         
     def is_empty(self):
         return self._question_list == []
+    
+    def get_length(self):
+        return len(self._question_list)
         
     def drop_current_question(self):
         if not self.is_empty():
