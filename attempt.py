@@ -33,20 +33,20 @@ class Attempt:
         return self._index
 
 
-    def add_question_attempt(self, question, answers):
+    def add_question_attempt(self, question, answers, mode):
         if len(question.get_correct_answers()) < answers:
             raise ValueError('There are more answers than there are in the question!!!')
         index = min(len(self._questions, len(self._given_answers)))
         self._questions.insert(index, question)
         self._given_answers.insert(index, answers)
-        self._actual_score += question.check_answer(answers)
+        self._actual_score += question.check_answer(answers, mode)
         self._actual_max_points += question.number_of_points
 
     
-    def get_total_score(self):
+    def get_total_score(self, mode):
         actual_score = 0
         for question, given_answer in zip(self._questions, self._given_answers):
-            actual_score += question.check_answer(given_answer)
+            actual_score += question.check_answer(given_answer, mode)
 
         self._actual_score = actual_score
         return actual_score
@@ -63,9 +63,9 @@ class Attempt:
         self._actual_score = 0
         self._index = 0
 
-    def add_answer(self, given_answer):
+    def add_answer(self, given_answer, mode):
         if len(self._questions) > len(self._given_answers):
-            self._actual_score += self._questions[len(self._given_answers)].check_answer(given_answer)
+            self._actual_score += self._questions[len(self._given_answers)].check_answer(given_answer, mode)
             self._actual_max_points += self._questions[len(self._given_answers)]._number_of_points
             self._given_answers.append(given_answer)
 

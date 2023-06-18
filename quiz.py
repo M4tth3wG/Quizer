@@ -88,7 +88,7 @@ class Quiz:
             self._is_blocked = False
             if self.check_emptiness_question_list():
                  self._is_ready, self._is_blocked = False, True
-            self._last_attempt.add_answer(input_answer)
+            self._last_attempt.add_answer(input_answer, self._mode)
             return last_question.get_correct_answers()
         else:
             raise QuizException('Question has already been answered!!!')
@@ -128,7 +128,7 @@ class Quiz:
     
     @mode.setter
     def mode(self, new_mode):
-        if new_mode == 0 or new_mode == 1:
+        if new_mode == GENTLE_MODE or new_mode == RELENTLESS_MODE:
             self._mode = new_mode
 
     @property
