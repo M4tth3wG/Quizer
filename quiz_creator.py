@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import *
 from PyQt6 import uic
 from pathlib import Path
 from quiz import Quiz
+import quiz
 import questions
 from functools import partial
 import exceptions
@@ -214,8 +215,20 @@ class QuizCreatorWindow(QMainWindow):
         default_directory = str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes'))
         file_filter = "JSON files (*.json)"
         file_path = QFileDialog.getSaveFileName(self, 'Zapisz quiz', directory=default_directory, filter=file_filter)[0]
-        self.quiz_builder.save_to_quiz_to_json(file_path)
 
+        try:
+            name = self.quiz_name_edit.text()
+            number_of_question_repetition = int(self.quiz_number_of_question_repetition_line_edit.text())
+            mode = quiz.RELENTLESS_MODE if self.quiz_restrictive_mode_check_box.isChecked() else quiz.GENTLE_MODE
+            shuffle = self.quiz_shuffle_check_box.isChecked()
+            shuffle_answers = self.quiz_answers_shuffle_check_box.isChecked()
+
+            self.quiz_builder.quiz_args = [name, number_of_question_repetition, mode, shuffle, shuffle_answers]
+
+            self.quiz_builder.save_to_quiz_to_json(file_path)
+        except:
+            self.main_window.show_error_message('Nieprawidłowe parametry quizu!')
+        
     def lock_question(self):
         self.save_question_btn.setEnabled(False)
         self.edit_question_btn.setEnabled(True)
@@ -251,7 +264,7 @@ class QuizCreatorWindow(QMainWindow):
 
 
     def show_quit_confirmation_dialog(self):
-        message = 'Spowoduje to wyjście do menu głównego. Wszystkie aktualne postępy zostaną utracone. Czy chcesz kontynuować?'
+        message = 'Spowoduje to wyjście do menu głównego. Wszystkie niezapisane postępy zostaną utracone. Czy chcesz kontynuować?'
         icon=QMessageBox.Icon.Warning
         title='Uwaga'
 
