@@ -175,6 +175,7 @@ class SingleChoiceQuestion(Question):
         super().__init__(content, answers, number_of_points)
         self._correct_answer = correct_answer
 
+
     def __dict__(self):
         return {
             'type': 'SQ',
