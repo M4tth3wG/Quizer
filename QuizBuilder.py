@@ -16,7 +16,7 @@ class QuizBuilder:
         if not self.is_empty():
             return self._question_list[self._actual_index]
         else:
-            raise EmptyListException()
+            raise EmptyListException("The list of questions is empty!!!")
     
     @current_question.setter
     def current_question(self, question):
@@ -25,7 +25,7 @@ class QuizBuilder:
         elif self._actual_index == 0:
             self._question_list.append(question)
         else:
-            raise UnexpectedEventException()
+            raise UnexpectedEventException('Something is wrong!')
 
 
     def add_question(self, question):
@@ -59,7 +59,7 @@ class QuizBuilder:
         
     def drop_current_question(self):
         if not self.is_empty():
-            self._question_list = self._question_list.pop(self._actual_index)
+            self._question_list.pop(self._actual_index)
             if self._actual_index >= 1:
                 self._actual_index -= 1
         else: 

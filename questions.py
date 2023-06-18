@@ -14,14 +14,14 @@ class Question(ABC):
 
     def __init__(self, content : str, answers : list, number_of_points : int = 1):
         if content == '':
-            raise EmptyContentException()
+            raise EmptyContentException("Question's content is empty!!!")
         
         if len(answers) == 0:
-            raise IncorrectAnswersNumberException()
+            raise IncorrectAnswersNumberException("There are no answers in list of answers")
         
         for answer in answers:
             if answer == '':
-                raise EmptyAnswerException()
+                raise EmptyAnswerException("Answer's content is empty")
             
         if number_of_points <= 0:
             raise ValueError("Number of points must be positive number!!!")
