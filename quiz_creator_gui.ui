@@ -225,7 +225,7 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="question_view_bottom_layout">
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="quit_btn">
             <property name="text">
              <string>Wyjdź</string>
@@ -245,7 +245,7 @@
             </property>
            </spacer>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="previous_question_btn">
             <property name="enabled">
              <bool>false</bool>
@@ -255,7 +255,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="next_question_btn">
             <property name="enabled">
              <bool>false</bool>
@@ -265,23 +265,43 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
+           <widget class="QPushButton" name="edit_question_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Edytuj pytanie</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignVCenter">
+           <widget class="QPushButton" name="save_question_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Zapisz pytanie</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="add_question_button">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Dodaj pytanie</string>
+             <string>Nowe pytanie</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="save_quiz_btn">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Zapisz</string>
+             <string>Zapisz quiz</string>
             </property>
            </widget>
           </item>

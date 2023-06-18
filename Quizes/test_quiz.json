@@ -32,6 +32,7 @@
     ],
     "mode": 1,
     "shuffle": false,
+    "shuffle_answers": false,
     "isReady": false,
     "isBlocked": true,
     "number_of_question_repetition": 1
