@@ -48,3 +48,33 @@ class IncorrectAnswersNumberException(Exception):
         return f'IncorrectAnswersNumberException: {self.message}'
     
 
+class EmptyContentException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'IncorrectAnswersNumberException: {self.message}'
+    
+class EmptyAnswerException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'IncorrectAnswersNumberException: {self.message}'
+    
+class EmptyListException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'EmptyListExceptionException: {self.message}'
+
+
+class UnexpectedEventException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'UnexpectedEventException: {self.message}'   
+    
+
