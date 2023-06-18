@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import string, re, os, sys, json, random
 from pathlib import Path
 from dataclasses import asdict, dataclass
-from exceptions import  IncorrectAnswersNumberException
+from exceptions import  IncorrectAnswersNumberException, EmptyAnswerException, EmptyContentException
 
 
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
@@ -12,9 +12,20 @@ MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
 # @dataclass
 class Question(ABC):
 
-    def __init__(self, content, answers : list, number_of_points=1):
+    def __init__(self, content : str, answers : list, number_of_points : int = 1):
+        if content == '':
+            raise EmptyContentException()
+        
+        if len(answers) == 0:
+            raise IncorrectAnswersNumberException()
+        
+        for answer in answers:
+            if answer == '':
+                raise EmptyAnswerException()
+            
         if number_of_points <= 0:
             raise ValueError("Number of points must be positive number!!!")
+        
         self._content = content
         self._number_of_points = number_of_points
         self._answers : dict = self.convert_answers_to_show_form(answers)
@@ -119,7 +130,6 @@ class Question(ABC):
     @staticmethod
     def read_from_dict(q_dict):
         if q_dict['type'] == 'SQ':
-            print(q_dict['answers'])
             return SingleChoiceQuestion.read_from_dict(q_dict)
         elif q_dict['type'] == 'MQ':
             return MultipleChoiceQuestion.read_from_dict(q_dict)
@@ -130,6 +140,19 @@ class Question(ABC):
     def shuffle_answers():
         pass
 
+    
+    # @staticmethod
+    # def make_question(content, answers, correct_answers, number_of_points, is_SQ):
+    #     Question.check_question_args(content, answers, correct_answers)
+    #     if is_SQ:
+    #         return SingleChoiceQuestion(content, answers, correct_answers[0], number_of_points)
+    #     else:
+    #         return MultipleChoiceQuestion(content, answers, correct_answers, number_of_points)
+
+
+
+
+
 
 
 
@@ -137,7 +160,7 @@ class Question(ABC):
 @dataclass
 class SingleChoiceQuestion(Question):
 
-    def __init__(self, content, answers : list, correct_answer: int, number_of_points=1):
+    def __init__(self, content : str, answers : list, correct_answer: int, number_of_points=1):
         super().__init__(content, answers, number_of_points)
         self._correct_answer = correct_answer
 
@@ -256,7 +279,7 @@ class SingleChoiceQuestion(Question):
 @dataclass
 class MultipleChoiceQuestion(Question):
 
-    def __init__(self, content, answers : list, correct_answers, number_of_points : int = 1):
+    def __init__(self, content: str, answers : list, correct_answers : list[int], number_of_points : int = 1):
         super().__init__(content, answers, number_of_points)
         if len(answers) < len(correct_answers):
             raise IncorrectAnswersNumberException('Incompatible number of answers!!!')
