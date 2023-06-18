@@ -38,10 +38,11 @@ class QuizBuilder:
 
 
     def insert(self, index, question):
-        if index < 0 or index >= len(self._question_list):
+        if index < 0 or index > len(self._question_list):
             raise IndexError()
+        self._actual_index = index
         self._question_list.insert(index, question)
-        self._current_index = index
+        
 
     def has_previous(self):
         return self._actual_index > 0
