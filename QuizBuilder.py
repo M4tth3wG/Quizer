@@ -43,7 +43,6 @@ class QuizBuilder:
         self._actual_index = index
         self._question_list.insert(index, question)
 
-
     def has_previous(self):
         return self._actual_index > 0
 
