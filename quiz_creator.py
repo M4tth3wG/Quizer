@@ -171,7 +171,7 @@ class QuizCreatorWindow(QMainWindow):
         self.unlock_question()
         self.clear_loaded_question_view()
         self.current_question_exists = False
-        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/{self.quiz_builder.get_length() + 1}')
+        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 2}/{self.quiz_builder.get_length() + 1}')
 
     def save_current_question(self):
         content = self.question_text_edit.toPlainText()
