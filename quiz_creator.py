@@ -69,10 +69,9 @@ class QuizCreatorWindow(QMainWindow):
         self.answer_vertical_layout.removeItem(answer_layout)
         self.answer_layouts_list.remove(answer_layout)
         
-        while answer_layout.count():
-            widget = answer_layout.takeAt(0).widget()
-            if widget:
-                widget.deleteLater()
+        for i in range(answer_layout.count()):
+            widget = answer_layout.itemAt(i).widget()
+            widget.deleteLater()
 
         answer_layout.deleteLater()
         self.relock_correct_answers_check_boxes()
@@ -88,8 +87,8 @@ class QuizCreatorWindow(QMainWindow):
                 layout.itemAt(i).widget().setEnabled(True)
 
     def clear_all_answers(self):
-        for layout in self.answer_layouts_list:
-            self.delete_answer(layout)
+        while len(self.answer_layouts_list) != 0:
+            self.delete_answer(self.answer_layouts_list[0])
 
     def update_correct_answers_check_boxes(self):
         if self.multiple_answer_question_check_box.isChecked():
