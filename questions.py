@@ -112,6 +112,17 @@ class Question(ABC):
 
         return answers_dict
     
+    def get_plain_answers(self):
+        answers_dict = {}
+        for answer, letter in zip(self.answers.values(), list(string.ascii_uppercase)):
+            pattern = rf'^[{letter}]\)\s.*?$'
+            if not re.match(pattern, answer):
+                answers_dict[letter] = answer
+            else: 
+                answers_dict[letter] = answer[3:]
+
+        return answers_dict
+    
     def show_answers(self):
         print(self._answers)
         

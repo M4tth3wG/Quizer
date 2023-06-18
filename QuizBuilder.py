@@ -1,5 +1,6 @@
 
 from exceptions import EmptyListException, UnexpectedEventException
+from quiz import Quiz
 
 class QuizBuilder:
 
@@ -65,6 +66,9 @@ class QuizBuilder:
         else: 
             raise IndexError()
     
+    def create_quiz(self, name, number_of_question_repetition = 1, mode = 0, shuffle=False, shuffle_answers=False):
+
+        return Quiz(name, self._question_list, number_of_question_repetition, mode, shuffle, shuffle_answers)
 
 
 

@@ -41,5 +41,10 @@ qb.drop_current_question()
 print(qb.current_index)
 print(qb.current_question)
 qb.drop_current_question()
-print(qb.current_index)
-print(qb.current_question)
+# print(qb.current_index)
+# print(qb.current_question)
+
+
+
+print(q1.answers)
+print(q1.get_plain_answers())
