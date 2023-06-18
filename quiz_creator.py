@@ -20,8 +20,6 @@ class QuizCreatorWindow(QMainWindow):
         self.answer_layouts_list = []
         self.main_window = main_window
 
-        """ self.quit_btn.clicked.connect(self.close)
-        self.quit_btn.clicked.connect(self.main_window.show) """
         self.quit_btn.clicked.connect(self.show_quit_confirmation_dialog)
         self.add_answer_btn.clicked.connect(self.create_answer_input)
         self.multiple_answer_question_check_box.stateChanged.connect(self.update_correct_answers_check_boxes)
@@ -181,12 +179,13 @@ class QuizCreatorWindow(QMainWindow):
         content = self.question_text_edit.toPlainText()
         answers = [layout.itemAt(1).widget().text() for layout in self.answer_layouts_list]
         correct_answers = [index for index, layout in enumerate(self.answer_layouts_list) if layout.itemAt(0).widget().isChecked()]
+        number_of_points = self.number_of_points_line_edit.text()
         
         try:
             if self.multiple_answer_question_check_box.isChecked():
-                question = questions.MultipleChoiceQuestion(content, answers, correct_answers)
+                question = questions.MultipleChoiceQuestion(content, answers, correct_answers, number_of_points=int(number_of_points))
             else:
-                question = questions.SingleChoiceQuestion(content, answers, correct_answers[0])
+                question = questions.SingleChoiceQuestion(content, answers, correct_answers[0], number_of_points=int(number_of_points))
         except:
             self.main_window.show_error_message('Niepoprawne parametry pytania!')
             return
@@ -220,6 +219,7 @@ class QuizCreatorWindow(QMainWindow):
         self.question_text_edit.setReadOnly(True)
         self.multiple_answer_question_check_box.setEnabled(False)
         self.add_answer_btn.setEnabled(False)
+        self.number_of_points_line_edit.setReadOnly(True)
         self.lock_all_answers()
 
     def unlock_question(self):
@@ -233,11 +233,13 @@ class QuizCreatorWindow(QMainWindow):
         self.question_text_edit.setReadOnly(False)
         self.multiple_answer_question_check_box.setEnabled(True)
         self.add_answer_btn.setEnabled(True)
+        self.number_of_points_line_edit.setReadOnly(False)
         self.unlock_all_answers()
 
     def clear_loaded_question_view(self):
         self.question_text_edit.setPlainText('')
         self.multiple_answer_question_check_box.setChecked(False)
+        self.number_of_points_line_edit.setText('1')
         self.clear_all_answers()
 
 
