@@ -1,0 +1,39 @@
+{
+    "name": "test_linuxiary",
+    "question_bank": [
+        {
+            "type": "SQ",
+            "content": "Jaki jest cel komunikatów ICMP?",
+            "answers": {
+                "A": "A) Zapewniają poprawne dostarczanie pakietu IP do odbiorcy",
+                "B": "B) Dostarczają informacji zwrotnych o transmisjach pakietów IP",
+                "C": "C) Monitorują proces zamiany adresów domenowych na adresy IP",
+                "D": "D) Informują routery o zmianach topologii sieci"
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        },
+        {
+            "type": "MQ",
+            "content": "Określ dwa powody, dla których administrator powinien podzielić większą sieć na podsieci.",
+            "answers": {
+                "A": "A) W celu uproszczenia topologii sieci",
+                "B": "B) W celu redukcji liczby potrzebnych routerów",
+                "C": "C) W celu ułatwienia wdrażania polityki bezpieczeństwa w przedsiębiorstwie",
+                "D": "D) W celu poprawy wydajności sieci",
+                "E": "E) W celu redukcji liczby potrzebnych przełączników"
+            },
+            "correct_answers": [
+                3,
+                4
+            ],
+            "number_of_points": 1
+        }
+    ],
+    "mode": 1,
+    "shuffle": true,
+    "shuffle_answers": false,
+    "isReady": false,
+    "isBlocked": true,
+    "number_of_question_repetition": 1
+}
