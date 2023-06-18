@@ -20,6 +20,9 @@ class QuizCreatorWindow(QMainWindow):
         self.answer_layouts_list = []
         self.main_window = main_window
 
+        self.setFixedWidth(814)
+        self.setFixedHeight(600)
+
         self.quit_btn.clicked.connect(self.show_quit_confirmation_dialog)
         self.add_answer_btn.clicked.connect(self.create_answer_input)
         self.multiple_answer_question_check_box.stateChanged.connect(self.update_correct_answers_check_boxes)
@@ -29,7 +32,11 @@ class QuizCreatorWindow(QMainWindow):
         self.save_question_btn.clicked.connect(self.save_current_question)
         self.add_question_btn.clicked.connect(self.add_new_question)
         self.save_quiz_btn.clicked.connect(self.save_quiz)
+        self.select_quiz_parameters_btn.clicked.connect(self.select_quiz_parameters)
+        self.back_to_creator_btn.clicked.connect(self.go_back_to_creator)
         self.delete_question_btn.clicked.connect(self.delete_current_question)
+
+        self.stackedWidget.setCurrentIndex(0)
 
         if quiz_path != None:
             self.quiz_builder.load_quiz_from_json(quiz_path)
@@ -213,7 +220,7 @@ class QuizCreatorWindow(QMainWindow):
         self.save_question_btn.setEnabled(False)
         self.edit_question_btn.setEnabled(True)
         self.add_question_btn.setEnabled(True)
-        self.save_quiz_btn.setEnabled(True)
+        self.select_quiz_parameters_btn.setEnabled(True)
         self.update_browsing_buttons()
 
         self.question_text_edit.setReadOnly(True)
@@ -226,7 +233,7 @@ class QuizCreatorWindow(QMainWindow):
         self.save_question_btn.setEnabled(True)
         self.edit_question_btn.setEnabled(False)
         self.add_question_btn.setEnabled(False)
-        self.save_quiz_btn.setEnabled(False)
+        self.select_quiz_parameters_btn.setEnabled(False)
         self.previous_question_btn.setEnabled(False)
         self.next_question_btn.setEnabled(False)
 
@@ -264,6 +271,12 @@ class QuizCreatorWindow(QMainWindow):
         cancel_button.clicked.connect(dialog.close)
 
         dialog.exec()
+
+    def select_quiz_parameters(self):
+        self.stackedWidget.setCurrentIndex(1)
+
+    def go_back_to_creator(self):
+        self.stackedWidget.setCurrentIndex(0)
 
 
     

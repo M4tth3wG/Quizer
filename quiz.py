@@ -235,7 +235,7 @@ class Quiz:
                 file.write(self.to_json() + '\n')
             return True
         except FileNotFoundError:
-            sys.err.write(f'Quiz not written to file: {path}')
+            sys.stderr.write(f'Quiz not written to file: {path}')
             return False
 
 
