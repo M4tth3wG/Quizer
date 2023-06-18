@@ -1,9 +1,19 @@
 
 
-x = []
+from QuizBuilder import QuizBuilder
+from questions import SingleChoiceQuestion
 
-x.insert(20, 20)
-print(x)
-x.insert(0, 1)
+x1 = SingleChoiceQuestion(
+    'Jaki jest cel komunikatów ICMP?',
+    [
+        'Zapewniają poprawne dostarczanie pakietu IP do odbiorcy',
+        'Dostarczają informacji zwrotnych o transmisjach pakietów IP',
+        'Monitorują proces zamiany adresów domenowych na adresy IP',
+        'Informują routery o zmianach topologii sieci'
+    ],
+    2
+)
 
-print(x)
+qb = QuizBuilder()
+
+qb.add_question(x1)
