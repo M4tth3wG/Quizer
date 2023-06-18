@@ -75,6 +75,14 @@ class UnexpectedEventException(Exception):
         self.message = message
 
     def __str__(self):
-        return f'UnexpectedEventException: {self.message}'   
+        return f'UnexpectedEventException: {self.message}'  
+    
+class NoQuizArgumentsException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f'NoQuizArgumentsException: {self.message}'  
+
     
 

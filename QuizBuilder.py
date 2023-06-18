@@ -1,5 +1,5 @@
 
-from exceptions import EmptyListException, UnexpectedEventException
+from exceptions import EmptyListException, UnexpectedEventException, NoQuizArgumentsException
 from quiz import Quiz
 
 class QuizBuilder:
@@ -7,6 +7,7 @@ class QuizBuilder:
     def __init__(self):
         self._question_list = []
         self._actual_index = 0
+        self._quiz_args = 5 * [None]
 
     @property
     def current_index(self):
@@ -17,7 +18,7 @@ class QuizBuilder:
         if not self.is_empty():
             return self._question_list[self._actual_index]
         else:
-            raise EmptyListException("The list of questions is empty!!!")
+            return None
     
     @current_question.setter
     def current_question(self, question):
@@ -66,10 +67,40 @@ class QuizBuilder:
         else: 
             raise IndexError()
     
-    def create_quiz(self, name, number_of_question_repetition = 1, mode = 0, shuffle=False, shuffle_answers=False):
+    def create_quiz(self):
+        if None in self._quiz_args:
+            raise NoQuizArgumentsException(f'Found: {self._quiz_arg}')
+        return Quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
+    
+    @property
+    def quiz_args(self):
+        return self._quiz_args.copy()
+    
+    @quiz_args.setter
+    def quiz_args(self, new_args):
+        if len(new_args) == 5:
+            for arg, typ in zip(new_args, [str, int, int, bool, bool]):
+               if type(arg) != typ:
+                   raise TypeError(f'Found: {type(arg)}  Expected: {typ}')
+            self._quiz_args = new_args
+        else:
+            raise ValueError()
+    
 
-        return Quiz(name, self._question_list, number_of_question_repetition, mode, shuffle, shuffle_answers)
 
+    def save_to_quiz_to_json(self, path):
+        return self.create_quiz().save_quiz_to_json(path)
+
+
+    def load_quiz_from_json(self, path):
+        load_quiz = Quiz.load_from_json(path)
+        if load_quiz != None:
+            self._current_index = 0
+            self._question_list = load_quiz.questions_bank
+            self._quiz_args = [load_quiz.name, load_quiz.number_of_question_repetition, load_quiz.mode, load_quiz.shuffle, load_quiz.shuffle_answers]
+            return True
+        else:
+            return False
 
 
 

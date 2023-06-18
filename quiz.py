@@ -1,4 +1,4 @@
-import os, random, json, copy
+import os, random, json, copy, sys
 from questions import Question
 from attempt import Attempt
 from itertools import repeat
@@ -114,6 +114,22 @@ class Quiz:
         if new_number <= 0:
             raise ValueError("Number of question repetition must be positive number!!!")
         self._number_of_question_repetition = new_number
+    
+    @property
+    def name(self):
+        return self._name
+    @name.setter
+    def name(self, new_name):
+        self._name = new_name
+
+    @property
+    def mode(self):
+        return self._mode
+    
+    @mode.setter
+    def mode(self, new_mode):
+        if new_mode == 0 or new_mode == 1:
+            self._mode = new_mode
 
     @property
     def shuffle(self):
@@ -182,23 +198,27 @@ class Quiz:
 
     @staticmethod   
     def load_from_json(path):
-        with open(path, 'r', encoding='utf-8') as file:
-            data = json.loads(file.read())
+        try:
+            with open(path, 'r', encoding='utf-8') as file:
+                data = json.loads(file.read())
 
-            name = data['name']
-            questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
-            mode = data['mode']
-            shuffle = data['shuffle']
-            shuffle_answers = data['shuffle_answers']
-            isReady = data['isReady'] 
-            isBlocked = data ['isBlocked']
-            number_of_question_repetition = data['number_of_question_repetition']
+                name = data['name']
+                questions_bank = [Question.read_from_dict(q_dict) for q_dict in data['question_bank']]
+                mode = data['mode']
+                shuffle = data['shuffle']
+                shuffle_answers = data['shuffle_answers']
+                isReady = data['isReady'] 
+                isBlocked = data ['isBlocked']
+                number_of_question_repetition = data['number_of_question_repetition']
 
-            return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition, shuffle_answers)
-            return_quiz._is_ready = isReady
-            return_quiz._is_blocked = isBlocked
+                return_quiz = Quiz(name, questions_bank, mode, shuffle, number_of_question_repetition, shuffle_answers)
+                return_quiz._is_ready = isReady
+                return_quiz._is_blocked = isBlocked
 
-            return return_quiz
+                return return_quiz
+        except FileNotFoundError:
+            sys.err.write(f'File not found (Path: {path})')
+            return None
         
 
         
@@ -206,6 +226,17 @@ class Quiz:
     def load_attempt_from_json(self, path, path_to_save_current_attempt=DEFAULT_PATH_TO_SAVE_ATTEMPT):
         self.save_attempt_to_json(path_to_save_current_attempt)
         self._last_attempt = Attempt.load_from_json(path)
+
+
+
+    def save_quiz_to_json(self, path):
+        try:
+            with open(path, 'w+', encoding='utf-8') as file:
+                file.write(self.to_json() + '\n')
+            return True
+        except FileNotFoundError:
+            sys.err.write(f'Quiz not written to file: {path}')
+            return False
 
 
 

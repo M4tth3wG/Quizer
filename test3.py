@@ -48,3 +48,13 @@ qb.drop_current_question()
 
 print(q1.answers)
 print(q1.get_plain_answers())
+
+
+qb = QuizBuilder()
+
+qb.load_quiz_from_json(r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_json.json')
+qb.save_to_quiz_to_json(r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_json2.json')
+
+
+print(qb._question_list[1])
+
