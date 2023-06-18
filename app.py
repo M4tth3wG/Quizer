@@ -27,7 +27,7 @@ class MenuWindow(QMainWindow):
 
     def load_quiz(self):
         try:
-            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
+            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes')))[0]
             loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
@@ -42,7 +42,7 @@ class MenuWindow(QMainWindow):
 
     def edit_quiz(self):
         try:
-            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes')))[0]
+            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes')))[0]
             self.open_quiz_creator(file_path)
         except:
             self.show_error_message('Nieprawidłowy plik quizu!')

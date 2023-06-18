@@ -167,11 +167,14 @@ class QuizCreatorWindow(QMainWindow):
             self.load_new_question_view()
 
     def load_new_question_view(self):
-        print('debug')
         self.unlock_question()
         self.clear_loaded_question_view()
         self.current_question_exists = False
-        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 2}/{self.quiz_builder.get_length() + 1}')
+        
+        if not self.quiz_builder.is_empty():
+            self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 2}/{self.quiz_builder.get_length() + 1}')
+        else:
+            self.quiz_question_number_label.setText('1/1')
 
     def save_current_question(self):
         content = self.question_text_edit.toPlainText()
@@ -189,6 +192,10 @@ class QuizCreatorWindow(QMainWindow):
         
         if self.current_question_exists:
             self.quiz_builder.drop_current_question()
+        elif self.quiz_builder.current_index == 0 and not self.quiz_builder.is_empty():
+            self.quiz_builder.insert(1, question)
+            self.lock_question()
+            return
 
         self.quiz_builder.add_question(question)
         self.lock_question()
@@ -197,7 +204,7 @@ class QuizCreatorWindow(QMainWindow):
         self.load_new_question_view()
 
     def save_quiz(self):
-        default_directory = str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizes'))
+        default_directory = str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes'))
         file_filter = "JSON files (*.json)"
         file_path = QFileDialog.getSaveFileName(self, 'Zapisz quiz', directory=default_directory, filter=file_filter)[0]
         self.quiz_builder.save_to_quiz_to_json(file_path)
