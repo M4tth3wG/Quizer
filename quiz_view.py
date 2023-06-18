@@ -38,6 +38,7 @@ class QuizWindow(QMainWindow):
             self.main_window.show_error_message('Nieprawidłowa liczba powtórzeń pytania!')
 
         self.quiz.shuffle = self.question_shuffle_check_box.isChecked()
+        swlf.quiz. = self.answer_shuffle_check_box.isChecked()
         
         self.quiz.prepare_quiz()
         self.quiz_window_views.setCurrentIndex(1)
