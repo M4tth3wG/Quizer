@@ -2,11 +2,13 @@ from abc import ABC, abstractmethod
 import string, re, os, sys, json, random
 from pathlib import Path
 from dataclasses import asdict, dataclass
+
 from exceptions import  IncorrectAnswersNumberException, EmptyAnswerException, EmptyContentException
 
 
 SINGLE_CHOICE_QUESTION_HEADER = 'SQ'
 MULTIPLE_CHOICE_QUESTION_HEADER = 'MQ'
+RELENTLESS_MODE = 0
 
 # 
 # @dataclass
@@ -70,7 +72,7 @@ class Question(ABC):
 
 
     @abstractmethod
-    def check_answer(self, input_answer):
+    def check_answer(self, input_answer, mode):
         pass
 
 
@@ -243,7 +245,7 @@ class SingleChoiceQuestion(Question):
         return result
     
 
-    def check_answer(self, input_answer):
+    def check_answer(self, input_answer, mode):
 
         if len(input_answer) == 1:
             return self._number_of_points if self._correct_answer == input_answer[0] else 0
@@ -367,7 +369,7 @@ class MultipleChoiceQuestion(Question):
 
         return result
     
-    def check_answer(self, input_answers):
+    def check_answer(self, input_answers, mode):
         if len(input_answers) > len(self._correct_answers):
             return 0
         actual_correct_answers = 0
@@ -375,8 +377,10 @@ class MultipleChoiceQuestion(Question):
             if correct_answer in input_answers:
                 actual_correct_answers += 1
             
-        # return actual_correct_answers/max(len(self.correct_answers), len(input_answers)) * self.number_of_points
-        return actual_correct_answers/len(self._correct_answers)* self._number_of_points
+        if mode == RELENTLESS_MODE and actual_correct_answers != len(self._correct_answers):
+            return 0
+        
+        return actual_correct_answers/len(self._correct_answers) * self._number_of_points
     
 
     def get_correct_answers(self):
