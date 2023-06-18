@@ -20,8 +20,9 @@ class QuizCreatorWindow(QMainWindow):
         self.answer_layouts_list = []
         self.main_window = main_window
 
-        self.quit_btn.clicked.connect(self.close)
-        self.quit_btn.clicked.connect(self.main_window.show)
+        """ self.quit_btn.clicked.connect(self.close)
+        self.quit_btn.clicked.connect(self.main_window.show) """
+        self.quit_btn.clicked.connect(self.show_quit_confirmation_dialog)
         self.add_answer_btn.clicked.connect(self.create_answer_input)
         self.multiple_answer_question_check_box.stateChanged.connect(self.update_correct_answers_check_boxes)
         self.previous_question_btn.clicked.connect(self.load_previous_question)
@@ -239,6 +240,28 @@ class QuizCreatorWindow(QMainWindow):
         self.multiple_answer_question_check_box.setChecked(False)
         self.clear_all_answers()
 
+
+    def show_quit_confirmation_dialog(self):
+        message = 'Spowoduje to wyjście do menu głównego. Wszystkie aktualne postępy zostaną utracone. Czy chcesz kontynuować?'
+        icon=QMessageBox.Icon.Warning
+        title='Uwaga'
+
+        cancel_button = QPushButton(text='Anuluj')
+        ok_button = QPushButton(text='Ok')
+
+        dialog = QMessageBox(parent=self)
+        dialog.addButton(cancel_button, QMessageBox.ButtonRole.RejectRole)
+        dialog.addButton(ok_button, QMessageBox.ButtonRole.AcceptRole)
+        dialog.setIcon(icon)
+        dialog.setWindowTitle(title)
+        dialog.setText(message)
+
+        ok_button.clicked.connect(self.close)
+        ok_button.clicked.connect(self.main_window.show)
+        ok_button.clicked.connect(dialog.close)
+        cancel_button.clicked.connect(dialog.close)
+
+        dialog.exec()
 
 
     
