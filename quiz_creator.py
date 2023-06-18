@@ -131,7 +131,7 @@ class QuizCreatorWindow(QMainWindow):
         
         self.question_text_edit.setPlainText(question.content)
         self.multiple_answer_question_check_box.setChecked(isinstance(question, questions.MultipleChoiceQuestion))
-        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/implement it')
+        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/{self.quiz_builder.get_length()}')
 
         for answer in question.get_plain_answers().values():
             answer_layout = self.create_answer_input()
@@ -169,8 +169,9 @@ class QuizCreatorWindow(QMainWindow):
 
     def load_new_question_view(self):
         self.clear_loaded_question_view()
-        #self.unlock_question()
+        self.unlock_question()
         self.current_question_exists = False
+        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/{self.quiz_builder.get_length() + 1}')
 
     def save_current_question(self):
         content = self.question_text_edit.toPlainText()
