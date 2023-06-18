@@ -1,17 +1,15 @@
-import PyQt6
 from PyQt6.QtWidgets import *
 from PyQt6 import uic
-from PyQt6.QtCore import QFile, QTextStream
 from pathlib import Path
 import sys
-import os
+from path_constants import GUI_RESOURCES, DEFAULT_DIRECTORY
 import quiz
 from quiz_view import QuizWindow
 from quiz_creator import QuizCreatorWindow
 from functools import partial
 
 class MenuWindow(QMainWindow):
-    
+
     def __init__(self, ui_file):
         super(MenuWindow, self).__init__()
         uic.loadUi(ui_file, self)
@@ -27,7 +25,7 @@ class MenuWindow(QMainWindow):
 
     def load_quiz(self):
         try:
-            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes')))[0]
+            file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
             loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
@@ -42,7 +40,7 @@ class MenuWindow(QMainWindow):
 
     def edit_quiz(self):
         try:
-            file_path = QFileDialog.getOpenFileName(directory=str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes')))[0]
+            file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
             self.open_quiz_creator(file_path)
         except:
             self.show_error_message('Nieprawidłowy plik quizu!')
@@ -60,19 +58,12 @@ class MenuWindow(QMainWindow):
 def main():
     app = QApplication([])
 
-    # loading custom style sheet
-
-    """ file = QFile("MaterialDark.qss")
-    file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
-    stream = QTextStream(file)
-    app.setStyleSheet(stream.readAll()) """
-
     try:
-        window = MenuWindow(Path("main_window.ui"))
+        window = MenuWindow(Path(GUI_RESOURCES).joinpath("main_window.ui"))
         window.show()
         sys.exit(app.exec())
     except:
-        sys.stderr.write("FATAL ERROR!!!")
+        sys.stderr.write("Quitting app")
     
 
 if __name__ == '__main__':
