@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import *
 from PyQt6 import uic
 from pathlib import Path
 from quiz import Quiz
+import quiz
 import questions
 from functools import partial
 import exceptions
@@ -27,6 +28,8 @@ class QuizWindow(QMainWindow):
         self.quit_btn.clicked.connect(self.main_window.show)
         self.quiz_back_to_menu_btn.clicked.connect(self.close)
         self.quiz_back_to_menu_btn.clicked.connect(self.main_window.show)
+        self.back_to_menu_btn.clicked.connect(self.close)
+        self.back_to_menu_btn.clicked.connect(self.main_window.show)
         self.confirm_btn.clicked.connect(self.confirm_answer)
         self.next_question_btn.clicked.connect(self.load_question)
         self.quiz_repeat_btn.clicked.connect(self.repeat_quiz)
@@ -40,6 +43,7 @@ class QuizWindow(QMainWindow):
 
         self.quiz.shuffle = self.question_shuffle_check_box.isChecked()
         self.quiz.shuffle_answers = self.answer_shuffle_check_box.isChecked()
+        self.quiz.mode = quiz.RELENTLESS_MODE if self.restrictive_mode_check_box.isChecked() else quiz.GENTLE_MODE
         
         self.quiz.prepare_quiz()
         self.quiz_window_views.setCurrentIndex(1)
