@@ -6,16 +6,18 @@ import quiz
 import questions
 from functools import partial
 import exceptions
+from path_constants import GUI_RESOURCES, DEFAULT_DIRECTORY
 from PyQt6.QtGui import QFont
 from QuizBuilder import QuizBuilder
 import os
 from pathlib import Path
 
+
 class QuizCreatorWindow(QMainWindow):
     
     def __init__(self, main_window, quiz_path = None):
         super(QuizCreatorWindow, self).__init__()
-        uic.loadUi(Path('quiz_creator_gui.ui'), self)
+        uic.loadUi(Path(GUI_RESOURCES).joinpath('quiz_creator_gui.ui'), self)
 
         self.quiz_builder = QuizBuilder()
         self.answer_layouts_list = []
@@ -212,7 +214,7 @@ class QuizCreatorWindow(QMainWindow):
         self.load_new_question_view()
 
     def save_quiz(self):
-        default_directory = str(Path(os.path.dirname(os.path.realpath(__file__))).joinpath('Quizzes'))
+        default_directory = str(DEFAULT_DIRECTORY)
         file_filter = "JSON files (*.json)"
         file_path = QFileDialog.getSaveFileName(self, 'Zapisz quiz', directory=default_directory, filter=file_filter)[0]
 

@@ -6,12 +6,14 @@ import quiz
 import questions
 from functools import partial
 import exceptions
+import os
+from path_constants import GUI_RESOURCES, DEFAULT_DIRECTORY
 
 class QuizWindow(QMainWindow):
 
     def __init__(self, quiz: Quiz, main_window):
         super(QuizWindow, self).__init__()
-        uic.loadUi(Path('quiz_gui.ui'), self)
+        uic.loadUi(Path(GUI_RESOURCES).joinpath('quiz_gui.ui'), self)
 
         self.current_question = None
         self.answer_btns = []
