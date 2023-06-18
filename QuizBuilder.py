@@ -33,7 +33,7 @@ class QuizBuilder:
     def add_question(self, question):
         if not self.is_empty():
             self._actual_index += 1
-        self._question_list.append(question)
+        self._question_list.insert(self._current_index, question)
 
 
     def has_previous(self):
@@ -68,7 +68,7 @@ class QuizBuilder:
             if self._actual_index >= 1:
                 self._actual_index -= 1
         else: 
-            raise IndexError()
+            raise EmptyListException("Question list is empty!!!")
     
     def create_quiz(self):
         if None in self._quiz_args:
