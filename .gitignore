@@ -161,4 +161,3 @@ cython_debug/
 
 questions_txt/*.txt
 quiz_results/*.db
-*.json

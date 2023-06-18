@@ -36,8 +36,10 @@ class QuizWindow(QMainWindow):
             self.quiz.number_of_question_repetition = int(self.question_repetition_line_edit.text())
         except:
             self.main_window.show_error_message('Nieprawidłowa liczba powtórzeń pytania!')
+            return
 
         self.quiz.shuffle = self.question_shuffle_check_box.isChecked()
+        self.quiz.shuffle_answers = self.answer_shuffle_check_box.isChecked()
         
         self.quiz.prepare_quiz()
         self.quiz_window_views.setCurrentIndex(1)
@@ -165,6 +167,7 @@ class QuizWindow(QMainWindow):
 
     def repeat_quiz(self):
         self.quiz_window_views.setCurrentIndex(0)
+        self.current_score_label.setText('0')
         self.quiz.reset_quiz()
 
     def display_final_score(self):

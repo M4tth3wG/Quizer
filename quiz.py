@@ -144,7 +144,7 @@ class Quiz:
         return self._shuffle_answers
     
     @shuffle_answers.setter
-    def shuffle(self, new_shuffle):
+    def shuffle_answers(self, new_shuffle):
         self._shuffle_answers = new_shuffle
 
     @property
