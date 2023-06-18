@@ -6,6 +6,7 @@ import questions
 from functools import partial
 import exceptions
 from PyQt6.QtGui import QFont
+from QuizBuilder import QuizBuilder
 
 class QuizCreatorWindow(QMainWindow):
     
@@ -13,12 +14,21 @@ class QuizCreatorWindow(QMainWindow):
         super(QuizCreatorWindow, self).__init__()
         uic.loadUi(Path('quiz_creator_gui.ui'), self)
 
+        self.quiz_builder = QuizBuilder()
         self.answer_layouts_list = []
         self.main_window = main_window
+
         self.quit_btn.clicked.connect(self.close)
         self.quit_btn.clicked.connect(self.main_window.show)
         self.add_answer_btn.clicked.connect(self.create_answer_input)
         self.multiple_answer_question_check_box.stateChanged.connect(self.update_correct_answers_check_boxes)
+        self.previous_question_btn.clicked.connect(self.load_previous_question)
+        self.next_question_btn.clicked.connect(self.load_next_question)
+        self.edit_question_btn.clicked.connect(self.edit_current_question)
+        self.save_question_btn.clicked.connect(self.save_current_question)
+        self.add_question_btn.clicked.connect(self.add_new_question)
+        self.save_quiz_btn.clicked.connect(self.save_quiz)
+        self.delete_question_btn.clicked.connect(self.delete_current_question)
 
     def create_answer_input(self):
         answer_line_edit = QLineEdit()
@@ -37,11 +47,13 @@ class QuizCreatorWindow(QMainWindow):
         answer_horizontal_layout.addWidget(delete_answer_btn)
 
         delete_answer_btn.clicked.connect(partial(self.delete_answer, answer_horizontal_layout))
-        correct_answer_check_box.stateChanged.connect(self.update_buttons)
+        correct_answer_check_box.stateChanged.connect(self.relock_correct_answers_check_boxes)
 
         self.answer_layouts_list.append(answer_horizontal_layout)
         self.answer_vertical_layout.addLayout(answer_horizontal_layout)
-        self.update_buttons()
+        self.relock_correct_answers_check_boxes()
+
+        return answer_horizontal_layout
 
     def delete_answer(self, answer_layout):
         self.answer_vertical_layout.removeItem(answer_layout)
@@ -53,7 +65,21 @@ class QuizCreatorWindow(QMainWindow):
                 widget.deleteLater()
 
         answer_layout.deleteLater()
-        self.update_buttons()
+        self.relock_correct_answers_check_boxes()
+
+    def lock_all_answers(self):
+        for layout in self.answer_layouts_list:
+            for i in layout.count():
+                layout.takeAt(0).widget().setEnabled(False)
+
+    def unlock_all_answers(self):
+        for layout in self.answer_layouts_list:
+            for i in layout.count():
+                layout.takeAt(0).widget().setEnabled(True)
+
+    def clear_all_answers(self):
+        for layout in self.answer_layouts_list:
+            self.delete_answer(layout)
 
     def update_correct_answers_check_boxes(self):
         if self.multiple_answer_question_check_box.isChecked():
@@ -65,7 +91,7 @@ class QuizCreatorWindow(QMainWindow):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setChecked(False)
 
-    def update_buttons(self):
+    def relock_correct_answers_check_boxes(self):
         buttons = [layout.itemAt(0).widget() for layout in self.answer_layouts_list]
         
         if self.multiple_answer_question_check_box.isChecked():
@@ -74,12 +100,6 @@ class QuizCreatorWindow(QMainWindow):
             self.unlock_correct_answers_check_boxes()
         else:
             self.lock_correct_answers_check_boxes()
-
-    def update_buttons_after_deletion(self):
-        buttons = [layout.itemAt(0).widget() for layout in self.answer_layouts_list]
-        
-        if not any(button.isChecked() for button in buttons):
-            self.unlock_correct_answers_check_boxes()
 
     def lock_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
@@ -90,6 +110,100 @@ class QuizCreatorWindow(QMainWindow):
     def unlock_correct_answers_check_boxes(self):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setEnabled(True)
+
+    def update_browsing_buttons(self):
+        self.next_question_btn.setEnabled(self.quiz_builder.has_next())
+        self.previous_question_btn.setEnabled(self.quiz_builder.has_previous())
+
+
+    def load_question(self, question):
+        self.clear_loaded_question_view()
+        
+        self.question_text_edit.setText(question.content)
+        self.multiple_answer_question_check_box.setChecked(isinstance(question, questions.MultipleChoiceQuestion))
+        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/implement it')
+
+        for answer in question.get_plain_answers().values():
+            answer_layout = self.create_answer_input()
+            answer_layout.itemAt(1).widget().setText(answer)
+
+        for correct_answer in question.get_correct_answers():
+            self.answer_layouts_list[correct_answer].itemAt(0).widget().setChecked(True)
+
+        self.lock_question()
+
+
+    def load_previous_question(self):
+        self.load_question(self.quiz_builder.prev())
+
+    def load_next_question(self):
+        self.load_question(self.quiz_builder.next())
+
+    def edit_current_question(self):
+        pass
+
+    def delete_current_question(self):
+        self.quiz_builder.drop_current_question()
+
+        if self.quiz_builder.current_question != None:
+            self.load_question(self.quiz_builder.current_question)
+
+    def save_current_question(self):
+        content = self.question_text_edit.text()
+        answers = [layout.itemAt(1).widget().text() for layout in self.answer_layouts_list]
+        correct_answers = [index for index, layout in enumerate(self.answer_layouts_list) if layout.itemAt(0).widget().isChecked()]
+        
+        try:
+            if self.multiple_answer_question_check_box.isChecked():
+                question = questions.MultipleChoiceQuestion(content, answers, correct_answers)
+            else:
+                question = questions.SingleChoiceQuestion(content, answers, correct_answers[0])
+        except:
+            self.main_window.show_error_message('Niepoprawne parametry pytania!')
+            return
+        
+        self.quiz_builder.drop_current_question()
+        self.quiz_builder.add_question(question)
+
+    def add_new_question(self):
+        pass
+
+    def save_quiz(self):
+        pass
+
+    def lock_question(self):
+        self.save_question_btn.setEnabled(False)
+        self.edit_question_btn.setEnabled(True)
+        self.add_question_btn.setEnabled(True)
+        self.save_quiz_btn.setEnabled(True)
+        self.update_browsing_buttons()
+
+        self.question_text_edit.setReadOnly(True)
+        self.multiple_answer_question_check_box.setEnabled(False)
+        self.add_answer_btn.setEnabled(False)
+        self.lock_all_answers()
+
+    def unlock_question(self):
+        self.save_question_btn.setEnabled(True)
+        self.edit_question_btn.setEnabled(False)
+        self.add_question_btn.setEnabled(False)
+        self.save_quiz_btn.setEnabled(False)
+        self.previous_question_btn.setEnabled(False)
+        self.next_question_btn.setEnabled(False)
+
+        self.question_text_edit.setReadOnly(False)
+        self.multiple_answer_question_check_box.setEnabled(True)
+        self.add_answer_btn.setEnabled(True)
+        self.unlock_all_answers()
+
+    def clear_loaded_question_view(self):
+        self.question_text_edit.setText('')
+        self.multiple_answer_question_check_box.setChecked(False)
+        self.clear_all_answers()
+
+
+
+    
         
 
     
