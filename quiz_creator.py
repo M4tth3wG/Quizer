@@ -28,6 +28,7 @@ class QuizCreatorWindow(QMainWindow):
         self.save_question_btn.clicked.connect(self.save_current_question)
         self.add_question_btn.clicked.connect(self.add_new_question)
         self.save_quiz_btn.clicked.connect(self.save_quiz)
+        self.delete_question_btn.clicked.connect(self.delete_current_question)
 
     def create_answer_input(self):
         answer_line_edit = QLineEdit()
@@ -66,6 +67,20 @@ class QuizCreatorWindow(QMainWindow):
         answer_layout.deleteLater()
         self.relock_correct_answers_check_boxes()
 
+    def lock_all_answers(self):
+        for layout in self.answer_layouts_list:
+            for i in layout.count():
+                layout.takeAt(0).widget().setEnabled(False)
+
+    def unlock_all_answers(self):
+        for layout in self.answer_layouts_list:
+            for i in layout.count():
+                layout.takeAt(0).widget().setEnabled(True)
+
+    def clear_all_answers(self):
+        for layout in self.answer_layouts_list:
+            self.delete_answer(layout)
+
     def update_correct_answers_check_boxes(self):
         if self.multiple_answer_question_check_box.isChecked():
             self.unlock_correct_answers_check_boxes()
@@ -96,14 +111,19 @@ class QuizCreatorWindow(QMainWindow):
         for layout in self.answer_layouts_list:
             layout.itemAt(0).widget().setEnabled(True)
 
-    def update_action_buttons(self):
-        pass
+    def update_browsing_buttons(self):
+        self.next_question_btn.setEnabled(self.quiz_builder.has_next())
+        self.previous_question_btn.setEnabled(self.quiz_builder.has_previous())
+
 
     def load_question(self, question):
+        self.clear_loaded_question_view()
+        
         self.question_text_edit.setText(question.content)
         self.multiple_answer_question_check_box.setChecked(isinstance(question, questions.MultipleChoiceQuestion))
+        self.quiz_question_number_label.setText(f'{self.quiz_builder.current_index + 1}/implement it')
 
-        for answer in question.answers:
+        for answer in question.get_plain_answers().values():
             answer_layout = self.create_answer_input()
             answer_layout.itemAt(1).widget().setText(answer)
 
@@ -114,16 +134,36 @@ class QuizCreatorWindow(QMainWindow):
 
 
     def load_previous_question(self):
-        pass
+        self.load_question(self.quiz_builder.prev())
 
     def load_next_question(self):
-        pass
+        self.load_question(self.quiz_builder.next())
 
     def edit_current_question(self):
         pass
 
+    def delete_current_question(self):
+        self.quiz_builder.drop_current_question()
+
+        if self.quiz_builder.current_question != None:
+            self.load_question(self.quiz_builder.current_question)
+
     def save_current_question(self):
-        pass
+        content = self.question_text_edit.text()
+        answers = [layout.itemAt(1).widget().text() for layout in self.answer_layouts_list]
+        correct_answers = [index for index, layout in enumerate(self.answer_layouts_list) if layout.itemAt(0).widget().isChecked()]
+        
+        try:
+            if self.multiple_answer_question_check_box.isChecked():
+                question = questions.MultipleChoiceQuestion(content, answers, correct_answers)
+            else:
+                question = questions.SingleChoiceQuestion(content, answers, correct_answers[0])
+        except:
+            self.main_window.show_error_message('Niepoprawne parametry pytania!')
+            return
+        
+        self.quiz_builder.drop_current_question()
+        self.quiz_builder.add_question(question)
 
     def add_new_question(self):
         pass
@@ -132,7 +172,36 @@ class QuizCreatorWindow(QMainWindow):
         pass
 
     def lock_question(self):
-        pass
+        self.save_question_btn.setEnabled(False)
+        self.edit_question_btn.setEnabled(True)
+        self.add_question_btn.setEnabled(True)
+        self.save_quiz_btn.setEnabled(True)
+        self.update_browsing_buttons()
+
+        self.question_text_edit.setReadOnly(True)
+        self.multiple_answer_question_check_box.setEnabled(False)
+        self.add_answer_btn.setEnabled(False)
+        self.lock_all_answers()
+
+    def unlock_question(self):
+        self.save_question_btn.setEnabled(True)
+        self.edit_question_btn.setEnabled(False)
+        self.add_question_btn.setEnabled(False)
+        self.save_quiz_btn.setEnabled(False)
+        self.previous_question_btn.setEnabled(False)
+        self.next_question_btn.setEnabled(False)
+
+        self.question_text_edit.setReadOnly(False)
+        self.multiple_answer_question_check_box.setEnabled(True)
+        self.add_answer_btn.setEnabled(True)
+        self.unlock_all_answers()
+
+    def clear_loaded_question_view(self):
+        self.question_text_edit.setText('')
+        self.multiple_answer_question_check_box.setChecked(False)
+        self.clear_all_answers()
+
+
 
     
         

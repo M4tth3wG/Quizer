@@ -275,10 +275,20 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="delete_question_btn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Usuń pytanie</string>
+            </property>
+           </widget>
+          </item>
           <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="save_question_btn">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Zapisz pytanie</string>
@@ -298,7 +308,7 @@
           <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="save_quiz_btn">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Zapisz quiz</string>
