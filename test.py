@@ -1,5 +1,5 @@
 from questions import SingleChoiceQuestion, MultipleChoiceQuestion, Question
-from quiz import Quiz
+from quiz import Quiz, RELENTLESS_MODE, GENTLE_MODE
 from pathlib import Path
 import os
 
@@ -52,22 +52,22 @@ def main():
         """
     )
 
-    print(SPLIT_LINE)
-    print(x1.answers)
-    print(x1._correct_answer)
-    print(SPLIT_LINE)
-    print(x2.answers)
-    print(x2._correct_answers)
+    # print(SPLIT_LINE)
+    # print(x1.answers)
+    # print(x1._correct_answer)
+    # print(SPLIT_LINE)
+    # print(x2.answers)
+    # print(x2._correct_answers)
 
-    x3 = x1.shuffle_answers()
-    x4 = x2.shuffle_answers()
+    # x3 = x1.shuffle_answers()
+    # x4 = x2.shuffle_answers()
 
-    print(SPLIT_LINE)
-    print(x3.answers)
-    print(x3._correct_answer)
-    print(SPLIT_LINE)
-    print(x4.answers)
-    print(x4._correct_answers)
+    # print(SPLIT_LINE)
+    # print(x3.answers)
+    # print(x3._correct_answer)
+    # print(SPLIT_LINE)
+    # print(x4.answers)
+    # print(x4._correct_answers)
 
 
 
@@ -78,19 +78,21 @@ def main():
     # x3.show_answers()
     # x4.show_answers()
 
-    # quiz = Quiz('my_first_quiz', [x1,x2,x3,x4])
+    quiz = Quiz('my_first_quiz', [x1,x2,x3,x4], mode=GENTLE_MODE)
     # quiz = Quiz.load_from_json(r'D:\test_quiz.json')
-    # quiz.prepare_quiz()
+    quiz.prepare_quiz()
 
-    # # correct_answers = [[2], [1,2,3], [2], [3,4]]
+    # correct_answers = [[2], [1,2,3], [2], [3,4]]
+    correct_answers = [[2], [1,2], [2], [3,4]]
     # correct_answers = [[2], [3,4]]
 
-    # print(SPLIT_LINE)
-    # for answer in correct_answers:
-    #     print(quiz.get_question())
-    #     print(f'Input answer: {answer}')
-    #     print(f'Correct answer: {quiz.check_answer(answer)}')
-    #     print(SPLIT_LINE)
+    print(SPLIT_LINE)
+    for answer in correct_answers:
+        print(quiz.get_question())
+        print(f'Input answer: {answer}')
+        print(f'Correct answer: {quiz.check_answer(answer)}')
+        print(f'Actual score: {quiz.get_score()}')
+        print(SPLIT_LINE)
 
     # print('Score:', quiz.get_score())
 

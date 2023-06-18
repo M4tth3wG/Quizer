@@ -45,6 +45,6 @@ with open('quiz_json.json', 'w+', encoding='utf-8') as file:
     file.write(quiz.to_json())
 
 
-load_quiz = Quiz.load_from_json(r'D:\test_quiz.json')
+load_quiz = Quiz.load_from_json(r'C:\Users\trine\OneDrive\Pulpit\Quizer\quiz_json2.json')
 
 print(load_quiz.questions_bank[1])
