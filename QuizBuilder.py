@@ -32,7 +32,8 @@ class QuizBuilder:
 
     def add_question(self, question):
         if not self.is_empty():
-            self._actual_index += 1
+            if not self.current_index == 0:
+                self._actual_index += 1
         self._question_list.insert(self._actual_index, question)
 
 
