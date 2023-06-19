@@ -80,7 +80,8 @@ class QuizBuilder:
     def create_quiz(self):
         if None in self._quiz_args:
             raise NoQuizArgumentsException(f'Found: {self._quiz_args}')
-        return Quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
+        # return Quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
+        return Quiz.create_new_quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
     
     @property
     def quiz_args(self):

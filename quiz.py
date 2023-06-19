@@ -211,7 +211,8 @@ class Quiz:
                 isBlocked = data ['isBlocked']
                 number_of_question_repetition = data['number_of_question_repetition']
 
-                return_quiz = Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle, shuffle_answers)
+                # return_quiz = Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle, shuffle_answers)
+                return_quiz = Quiz.create_new_quiz(name, questions_bank, number_of_question_repetition, mode, shuffle, shuffle_answers)
                 return_quiz._is_ready = isReady
                 return_quiz._is_blocked = isBlocked
 
