@@ -42,7 +42,6 @@ class QuizBuilder:
             raise IndexError()
         self._actual_index = index
         self._question_list.insert(index, question)
-        
 
     def has_previous(self):
         return self._actual_index > 0
@@ -82,6 +81,7 @@ class QuizBuilder:
         if None in self._quiz_args:
             raise NoQuizArgumentsException(f'Found: {self._quiz_args}')
         return Quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
+        # return Quiz.create_new_quiz(self._quiz_args[0], self._question_list, self._quiz_args[1], self._quiz_args[2], self._quiz_args[3], self._quiz_args[4])
     
     @property
     def quiz_args(self):
