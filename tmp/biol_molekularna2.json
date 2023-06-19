@@ -1,0 +1,146 @@
+{
+    "name": "biol_molekularna2",
+    "question_bank": [
+        {
+            "type": "MQ",
+            "content": "Atenuacja to proces regulujący pobieranie tryptofanu i polega na:",
+            "answers": {
+                "A": "A) Połączeniu transkrypcji i translacji",
+                "B": "B) Ograniczeniu ekspresji operonu tryptofanowego w wysokim stężeniu tryptofanu",
+                "C": "C) Przeciwdziałaniu zakończenia transkrypcji- polimeraza RNA zatrzymuje się przedwcześnie",
+                "D": "D) Polega na związaniu się tryptofanu z promotorem przez co jest zahamowany dostęp polimerazy do operonu i skutkuje zahamowaniem ekspresji genów."
+            },
+            "correct_answers": [
+                0,
+                1,
+                2
+            ],
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "W procesie transkrypcji u Eukariota biorą udział 3 polimerazy RNA. Wybierz odpowiednio przyporządkowane polimerazy do ich funkcji i miejsca występowania. ",
+            "answers": {
+                "A": "A) Pol I: w jąderku, synteza rRNA; Pol II: w jądrze, synteza mRNA; Pol III: w jądrze, synteza 5S\nrRNA, tRNA",
+                "B": "B) Pol I: w jądrze, synteza mRNA; Pol II: w jądrze, synteza 5S rRNA, tRNA; Pol III: w jąderku,\nsynteza rRNA",
+                "C": "C) Pol I: w jąderku, synteza 5S rRNA, tRNA; Pol II: w jądrze, synteza mRNA; Pol III: w jądrze,\nsynteza rRNA",
+                "D": "D) Pol I: w jąderku, synteza rRNA; Pol II: w jądrze, synteza 5S rRNA, tRNA; Pol III: w jądrze\nsynteza mRNA"
+            },
+            "correct_answers": 0,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Zaznacz prawdziwe zdanie dotyczące transkrypcji:",
+            "answers": {
+                "A": "A) zachodzi w kierunku 3’ -> 5’ przy udziale polimerazy RNA",
+                "B": "B) zachodzi w kierunku 3’ -> 5’ przy udziale polimerazy DNA",
+                "C": "C) zachodzi w kierunku 5’ -> 3’ przy udziale polimerazy RNA",
+                "D": "D) zachodzi w kierunku 5’ -> 3’ przy udziale polimerazy DNA"
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "W laboratorium oczyszczono białko Prs z E. coli o masie 37 kDa, pI 5,23 i molowym współczynniku absorpcji 6100. Przygotowano bufor do dializy zawierający 50 mM Tris, 500 mM NaCl, oraz 10 % glicerol. Jakie pH można ustawić dla buforu do dializy tego białka?",
+            "answers": {
+                "A": "A) pH 5,0",
+                "B": "B) pH 5,3",
+                "C": "C) pH 6,0",
+                "D": "D) pH 7,3"
+            },
+            "correct_answers": 3,
+            "number_of_points": 1
+        },
+        {
+            "type": "MQ",
+            "content": "Jaką strukturę tworzy sekwencja terminatorowa w terminacji Rho-niezależnej?",
+            "answers": {
+                "A": "A) spinki do włosów ",
+                "B": "B) drugorzędową",
+                "C": "C) beta harmonijki",
+                "D": "D) alfa harmonijki"
+            },
+            "correct_answers": [
+                0,
+                1
+            ],
+            "number_of_points": 2
+        },
+        {
+            "type": "MQ",
+            "content": "Zaznacz zdanie prawdziwe o współzawodnictwie czynników σ o wiązanie do rdzenia polimerazy RNA ",
+            "answers": {
+                "A": "A) σ70 ma największe powinowactwo do rdzenia RNAP",
+                "B": "B) ilość σ70 w komórce jest zawsze na mniej więcej stałym poziomie",
+                "C": "C) stężenie pozostałych podjednostek σ zmienia się w zależności od czynników środowiskowych ",
+                "D": "D) σ70 ma najmniejsze powinowactwo do rdzenia RNAP"
+            },
+            "correct_answers": [
+                0,
+                1,
+                2
+            ],
+            "number_of_points": 5
+        },
+        {
+            "type": "SQ",
+            "content": "Na czym polega edycja RNA?",
+            "answers": {
+                "A": "A) modyfikacja końców mRNA",
+                "B": "B)  jeden gen koduje różne białka, ekspresja zależna od typu komórki ",
+                "C": "C) zmiana informacji w transkrypcie RNA przez reakcję chemiczną prowadzącą do zmiany jednej zasady azotowej w inną",
+                "D": "D) dołączenie kilku nukleotydów "
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        },
+        {
+            "type": "MQ",
+            "content": "Wyróżniamy 4 klasy intronów. Które z nich charakteryzują się „autowycinaniem”? (selfsplicing)",
+            "answers": {
+                "A": "A) Klasa 1",
+                "B": "B) Klasa 2",
+                "C": "C) Klasa 3",
+                "D": "D) Klasa 4"
+            },
+            "correct_answers": [
+                0,
+                1,
+                2
+            ],
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Pirosekwencjonowanie uznaje się za pojawienie drugiej generacji sekwencjonowania DNA. Jest to technologia opierająca się na pomiarze luminescencji. W jaki sposób generowana jest luminescencja w procesie pirosekwencjonowania?",
+            "answers": {
+                "A": "A) W wyniku hydrolizy pirofosforanu",
+                "B": "B) W wyniku syntezy pirofosforanu",
+                "C": "C) Dzięki znakowanemu fluorescsencyjnie pirofosforanowi",
+                "D": "D) Dzięki znakowanemu izotopowo pirofosforanowi"
+            },
+            "correct_answers": 1,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Gdzie znajdują się miejsca promotorowe w polimerazie I i II?",
+            "answers": {
+                "A": "A)  W obrębie transkrybowanych sekwencji – downstream",
+                "B": "B) Przed miejscem startu – upstream",
+                "C": "C) Za sekwencjami transkrybowanymi",
+                "D": "D) Brak poprawnej odpowiedzi"
+            },
+            "correct_answers": 1,
+            "number_of_points": 1
+        }
+    ],
+    "mode": 0,
+    "shuffle": true,
+    "shuffle_answers": true,
+    "isReady": false,
+    "isBlocked": true,
+    "number_of_question_repetition": 1
+}

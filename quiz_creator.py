@@ -218,6 +218,9 @@ class QuizCreatorWindow(QMainWindow):
         file_filter = "JSON files (*.json)"
         file_path = QFileDialog.getSaveFileName(self, 'Zapisz quiz', directory=default_directory, filter=file_filter)[0]
 
+        if file_path == '':
+            return
+
         try:
             name = self.quiz_name_edit.text()
             number_of_question_repetition = int(self.quiz_number_of_question_repetition_line_edit.text())
@@ -271,7 +274,7 @@ class QuizCreatorWindow(QMainWindow):
         title='Uwaga'
 
         cancel_button = QPushButton(text='Anuluj')
-        ok_button = QPushButton(text='Ok')
+        ok_button = QPushButton(text='OK')
 
         dialog = QMessageBox(parent=self)
         dialog.addButton(cancel_button, QMessageBox.ButtonRole.RejectRole)

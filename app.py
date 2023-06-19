@@ -27,6 +27,10 @@ class MenuWindow(QMainWindow):
     def load_quiz(self):
         #try:
             file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
+            
+            if file_path == '':
+                return
+            
             loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
@@ -42,6 +46,10 @@ class MenuWindow(QMainWindow):
     def edit_quiz(self):
         try:
             file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
+            
+            if file_path == '':
+                return
+
             self.open_quiz_creator(file_path)
         except:
             self.show_error_message('Nieprawidłowy plik quizu!')
@@ -67,9 +75,10 @@ def main():
 
         window = MenuWindow(Path(GUI_RESOURCES).joinpath("main_window.ui"))
         window.show()
-        sys.exit(app.exec())
     except:
         sys.stderr.write("Quitting app")
+
+    sys.exit(app.exec())
     
 
 if __name__ == '__main__':
