@@ -1,0 +1,95 @@
+{
+    "name": "test23",
+    "question_bank": [
+        {
+            "type": "SQ",
+            "content": "Jednym z genów strukturalnych kodujących białka w operonie laktozowym jest gen LacY odpowiedzialny za:",
+            "answers": {
+                "A": "A) kodowanie enzymu – transacetylazy β – galaktozydazowej transportującej laktozę do wnętrza komórki (transcetylaza kodowana przez lacA i dodaje grupy dodatkowe)",
+                "B": "B) kodowanie enzymu – β – galaktozydazy, która odpowiada za hydrolizę laktozy do glukozy i fruktozy",
+                "C": "C) kodowanie enzymu – β - galaktozydazy, która odpowiada za hydrolizę laktozy do glukozy i galaktozy (lacZ)",
+                "D": "D) kodowanie enzymu – permeazy laktozowej, która odpowiada za transport laktozy"
+            },
+            "correct_answers": 3,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Ramiona szczypiec rdzenia polimerazy:",
+            "answers": {
+                "A": "A) Zawierają centrum aktywne",
+                "B": "B) Zawierają kanał, przez który dostarczane są rybonukleotydy",
+                "C": "C) Tworzą szczelinę z jonem Mg2+, który uczestniczy we wiązaniu DNA ",
+                "D": "D) Zapobiegają utrzymywaniu się dupleksu DNA:RNA"
+            },
+            "correct_answers": 2,
+            "number_of_points": 2
+        },
+        {
+            "type": "SQ",
+            "content": "Które z poniższych organizmów może użyć RNA jako swojego genomu?",
+            "answers": {
+                "A": "A) wirus",
+                "B": "B) bakteria",
+                "C": "C) archeon",
+                "D": "D) komórka eukariotyczna"
+            },
+            "correct_answers": 0,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Która z poniższych odpowiedzi zawiera geny kodujące białka biorące udział w replikacji?",
+            "answers": {
+                "A": "A) holB, dnaE, ter",
+                "B": "B) dnaA, hola, dnaN",
+                "C": "C) dnaX, oriC, diaA",
+                "D": "D) dnaA, recA, spo0"
+            },
+            "correct_answers": 1,
+            "number_of_points": 2
+        },
+        {
+            "type": "SQ",
+            "content": "Topoizomerazy to enzymy, które usuwają nadmiar superskrętów. Aby tego dokonać:",
+            "answers": {
+                "A": "A) Nacinają zawsze obie nici DNA",
+                "B": "B) Nacinają tylko jedną nić DNA",
+                "C": "C) Nacinają jedną lub dwie nici DNA",
+                "D": "D) Nie nacinają nici DNA."
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Gdzie i u kogo występuje czapeczka?",
+            "answers": {
+                "A": "A) U prokariotów na końcu 5’",
+                "B": "B) U eukariotów na końcu 3’",
+                "C": "C) U eukariotów na końcu 5’",
+                "D": "D) U prokariotów na końcu 3’"
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        },
+        {
+            "type": "SQ",
+            "content": "Polimeraza RNA u E. coli:",
+            "answers": {
+                "A": "A) Zawiera 5 podjednostek rdzenia włącznie z jedną dodatkową podjednostką ",
+                "B": "B) Występuje tylko jedna polimeraza RNA ",
+                "C": "C) Potrzebuje do rozpoczęcia transkrypcji zestawu podstawowych czynników transkrypcyjnych  ",
+                "D": "D) Odpowiedź A i B są poprawne"
+            },
+            "correct_answers": 1,
+            "number_of_points": 1
+        }
+    ],
+    "mode": 1,
+    "shuffle": true,
+    "shuffle_answers": true,
+    "isReady": false,
+    "isBlocked": true,
+    "number_of_question_repetition": 2
+}

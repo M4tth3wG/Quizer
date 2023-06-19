@@ -161,5 +161,6 @@ cython_debug/
 
 questions_txt/*.txt
 quiz_results/*.db
-output/
-*.exe
+Quizzes/*.json
+tests_folder/*.py
+questions_json/*.json

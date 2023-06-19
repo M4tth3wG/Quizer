@@ -177,4 +177,4 @@ class QuizWindow(QMainWindow):
         self.quiz.reset_quiz()
 
     def display_final_score(self):
-        self.final_score_label.setText(f'{self.quiz.get_score()}/{self.quiz.get_total_max_points()}')
+        self.final_score_label.setText(f'{round(self.quiz.get_score(),2)}/{self.quiz.get_total_max_points()}')
