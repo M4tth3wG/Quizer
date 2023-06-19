@@ -67,13 +67,13 @@ class QuizWindow(QMainWindow):
         self.quiz_progress_label.setText(f'{self.quiz.get_actual_index() + 1}/{self.quiz.get_number_of_question()}')
 
     def update_current_score_label(self):
-        self.current_score_label.setText(f'{round(self.quiz.get_score(),2)}/{self.quiz.get_actual_max_points()}')
+        self.current_score_label.setText(f'{round(self.quiz.get_score(), 2)}/{self.quiz.get_actual_max_points()}')
 
     def update_question_type_label(self):
         if isinstance(self.current_question, questions.SingleChoiceQuestion):
-            self.question_type_label.setText('Jednokrotnego wyboru')
+            self.question_type_label.setText('Pytanie jednokrotnego wyboru')
         else:
-            self.question_type_label.setText('Wielokrotnego wyboru')
+            self.question_type_label.setText('Pytanie wielokrotnego wyboru')
 
     def load_answers(self):
         self.clear_answers()

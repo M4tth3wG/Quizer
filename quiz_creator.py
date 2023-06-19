@@ -274,7 +274,7 @@ class QuizCreatorWindow(QMainWindow):
         title='Uwaga'
 
         cancel_button = QPushButton(text='Anuluj')
-        ok_button = QPushButton(text='Ok')
+        ok_button = QPushButton(text='OK')
 
         dialog = QMessageBox(parent=self)
         dialog.addButton(cancel_button, QMessageBox.ButtonRole.RejectRole)
