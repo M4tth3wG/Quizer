@@ -71,9 +71,9 @@ class QuizWindow(QMainWindow):
 
     def update_question_type_label(self):
         if isinstance(self.current_question, questions.SingleChoiceQuestion):
-            self.question_type_label.setText('Jednokrotnego wyboru')
+            self.question_type_label.setText('Pytanie jednokrotnego wyboru')
         else:
-            self.question_type_label.setText('Wielokrotnego wyboru')
+            self.question_type_label.setText('Pytanie wielokrotnego wyboru')
 
     def load_answers(self):
         self.clear_answers()
