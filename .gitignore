@@ -164,3 +164,4 @@ quiz_results/*.db
 Quizzes/*.json
 tests_folder/*.py
 questions_json/*.json
+*.exe
