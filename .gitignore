@@ -162,3 +162,4 @@ cython_debug/
 questions_txt/*.txt
 quiz_results/*.db
 output/
+*.exe
