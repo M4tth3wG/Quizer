@@ -209,7 +209,7 @@ class Quiz:
                 shuffle_answers = data['shuffle_answers']
                 isReady = data['isReady'] 
                 isBlocked = data ['isBlocked']
-                number_of_question_repetition = data['number_of_question_repetition
+                number_of_question_repetition = data['number_of_question_repetition']
                 return_quiz = Quiz(name, questions_bank, number_of_question_repetition, mode, shuffle,  shuffle_answers)
 
                 return_quiz._is_ready = isReady
