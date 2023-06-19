@@ -18,7 +18,7 @@ class MenuWindow(QMainWindow):
         self.setFixedWidth(500)
         self.setFixedHeight(250)
 
-        self.quit_btn.clicked.connect(exit)
+        self.quit_btn.clicked.connect(sys.exit)
         self.load_quiz_btn.clicked.connect(self.load_quiz)
         self.create_new_quiz_btn.clicked.connect(partial(self.open_quiz_creator, None))
         self.edit_quiz_btn.clicked.connect(self.edit_quiz)
