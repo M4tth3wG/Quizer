@@ -1,0 +1,23 @@
+{
+    "name": "biol_molekularna3",
+    "question_bank": [
+        {
+            "type": "SQ",
+            "content": "Powtórzenia których połączeń nukleotydów skutkują powstaniem struktury - \"spinki do\nwłosów\", w terminacji transkrypcji Rho-niezależnej:",
+            "answers": {
+                "A": "A) A-U",
+                "B": "B) A-T ",
+                "C": "C) C-G ",
+                "D": "D) powtórzenia nie odgrywają roli w tworzeniu \"spinki do włosów\" "
+            },
+            "correct_answers": 2,
+            "number_of_points": 1
+        }
+    ],
+    "mode": 0,
+    "shuffle": true,
+    "shuffle_answers": false,
+    "isReady": false,
+    "isBlocked": true,
+    "number_of_question_repetition": 1
+}
