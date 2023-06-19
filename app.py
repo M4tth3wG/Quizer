@@ -26,11 +26,11 @@ class MenuWindow(QMainWindow):
     def load_quiz(self):
         try:
             file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
-            loaded_quiz = quiz.Quiz.load_from_json(file_path)
-
-            if loaded_quiz == None:
+            
+            if file_path == '':
                 return
             
+            loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
             self.close()
@@ -69,9 +69,10 @@ def main():
     try:
         window = MenuWindow(Path(GUI_RESOURCES).joinpath("main_window.ui"))
         window.show()
-        sys.exit(app.exec())
     except:
         sys.stderr.write("Quitting app")
+
+    sys.exit(app.exec())
     
 
 if __name__ == '__main__':
