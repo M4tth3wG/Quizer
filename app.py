@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6 import uic
+from PyQt6.QtCore import QFile, QTextStream
 from pathlib import Path
 import sys
 from path_constants import GUI_RESOURCES, DEFAULT_DIRECTORY
@@ -24,14 +25,14 @@ class MenuWindow(QMainWindow):
         self.edit_quiz_btn.clicked.connect(self.edit_quiz)
 
     def load_quiz(self):
-        try:
+        #try:
             file_path = QFileDialog.getOpenFileName(directory=str(DEFAULT_DIRECTORY))[0]
             loaded_quiz = quiz.Quiz.load_from_json(file_path)
             self.quiz_window = QuizWindow(loaded_quiz, self)
             self.quiz_window.show()
             self.close()
-        except:
-            self.show_error_message('Nieprawidłowy plik quizu!')
+        #except:
+            #self.show_error_message('Nieprawidłowy plik quizu!')
 
     def open_quiz_creator(self, quiz_path = None):
         self.quiz_creator_window = QuizCreatorWindow(self, quiz_path)
@@ -59,6 +60,11 @@ def main():
     app = QApplication([])
 
     try:
+        file = QFile(str(Path(GUI_RESOURCES).joinpath('quizer_style_sheet.qss')))
+        file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
+        stream = QTextStream(file)
+        app.setStyleSheet(stream.readAll())
+
         window = MenuWindow(Path(GUI_RESOURCES).joinpath("main_window.ui"))
         window.show()
         sys.exit(app.exec())
