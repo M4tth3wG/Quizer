@@ -218,7 +218,7 @@ class Quiz:
 
                 return return_quiz
         except FileNotFoundError:
-            sys.err.write(f'File not found (Path: {path})')
+            sys.stderr.write(f'File not found (Path: {path})')
             return None
         
 
